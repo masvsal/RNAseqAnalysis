@@ -28,8 +28,8 @@ public class DirectoryApp {
 
         while (keepGoing) {
             System.out.println("Welcome to the file explorer! :) \n");
-            System.out.println("*A* = add experiment");
-            System.out.println("*R* = remove experiment");
+            System.out.println("*A* = add Experiment");
+            System.out.println("*R* = remove Experiment");
             System.out.println("*Q* = quit");
             printRange(experimentDirectory);
             displayExperiments();
@@ -80,6 +80,32 @@ public class DirectoryApp {
         }
     }
 
+
+    //MODIFIES: this
+    //EFFECTS: processes user input inside of an experiment
+    private void runDataFile(Experiment selExperiment, GenericDataFile file) {
+        boolean keepGoing = true;
+        Scanner myObj = new Scanner(System.in);
+
+        String command;
+
+        while (keepGoing) {
+            System.out.println("*M* = modify description");
+            System.out.println("*Q* = quit");
+            displayDataFile(file);
+            command = myObj.nextLine();
+            command = command.toLowerCase();
+
+            if (command.equals("q")) {
+                keepGoing = false;
+            } else if (command.equals("m")) {
+                newDescription(file);
+            } else {
+                System.out.println("Invalid Command");
+            }
+        }
+    }
+
     //Effect: prints range of numbers to select, if more than one experiment in directory.
     // If no files, does not print anything
     public void printRange(Directory directory) {
@@ -109,11 +135,7 @@ public class DirectoryApp {
         Integer intCommand = Integer.parseInt(command);
         if (intCommand <= selExperiment.length()) {
             GenericDataFile selDataFile = selExperiment.getFile(intCommand);
-            System.out.println("Name: " + selDataFile.getName());
-            System.out.println("Description: " + selDataFile.getDescription());
-            System.out.println("__________________________________________");
-            System.out.println("Data: " + selDataFile.getData());
-            System.out.println("******************************************");
+            runDataFile(selExperiment, selDataFile);
 
         } else {
             System.out.println("\nInvalid Selection: Out of Range \nPlease Select Again");
@@ -158,6 +180,17 @@ public class DirectoryApp {
         System.out.println("description: " + experiment.getDescription());
         displayFiles(experiment);
     }
+
+    //EFFECTS: displays the content of a data file to a user
+    private void displayDataFile(GenericDataFile file) {
+        System.out.println("Name: " + file.getName());
+        System.out.println("Description: " + file.getDescription());
+        System.out.println("__________________________________________");
+        System.out.println("Data: " + file.getData());
+        System.out.println("******************************************");
+    }
+
+
 
     //EFFECTS: displays all the experiments in a directory to user
     private void displayFiles(Directory directory) {
