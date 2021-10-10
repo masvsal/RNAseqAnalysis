@@ -15,6 +15,7 @@ public class DirectoryApp {
 
     //EFFECTS: runs the file directory application
     public DirectoryApp() {
+        init();
         runExperimentDirectory();
     }
 
@@ -25,15 +26,12 @@ public class DirectoryApp {
         Scanner myObj = new Scanner(System.in);
         String command;
 
-        init();
-
         while (keepGoing) {
             System.out.println("Welcome to the file explorer! :) \n");
             System.out.println("*A* = add experiment");
             System.out.println("*R* = remove experiment");
             System.out.println("*Q* = quit");
-            System.out.println("Enter any number in the range 1 to "
-                    + experimentDirectory.length() + " to analyze an existing experiment \n");
+            printRange(experimentDirectory);
             displayExperiments();
             command = myObj.nextLine();
             command = command.toLowerCase();
@@ -60,12 +58,10 @@ public class DirectoryApp {
 
         String command;
 
-        init();
         while (keepGoing) {
             System.out.println("*A* = add data file \n *R* = remove data file \n *M* = modify description");
             System.out.println("*Q* = quit");
-            System.out.println("Enter any number in the range 1 to "
-                    + selExperiment.length() + " to inspect an existing data file. \n");
+            printRange(selExperiment);
             displayDataFiles(selExperiment);
             command = myObj.nextLine();
             command = command.toLowerCase();
@@ -84,6 +80,15 @@ public class DirectoryApp {
         }
     }
 
+    //Effect: prints range of numbers to select, if more than one experiment in directory.
+    // If no Experiments, does not print anything
+    public void printRange(Directory directory) {
+        Integer length = directory.length();
+        if (length > 0) {
+            System.out.println("Enter any number in the range 1 to "
+                    + length + " to open a file \n");
+        }
+    }
     //MODIFIES: this
     //EFFECTS: processes user command while in an experimental directory
     private void processExperimentDirectoryCommand(String command) {
