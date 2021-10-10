@@ -41,7 +41,7 @@ public class DirectoryApp {
             } else if (command.equals("a")) {
                 addExperiment();
             } else if (command.equals("r")) {
-                removeExperiment();
+                removeFile(experimentDirectory);
             } else {
                 processExperimentDirectoryCommand(command);
             }
@@ -59,7 +59,7 @@ public class DirectoryApp {
         String command;
 
         while (keepGoing) {
-            System.out.println("*A* = add data file \n *R* = remove data file \n *M* = modify description");
+            System.out.println("*A* = add data file \n*R* = remove data file \n*M* = modify description");
             System.out.println("*Q* = quit");
             printRange(selExperiment);
             displayDataFiles(selExperiment);
@@ -71,7 +71,7 @@ public class DirectoryApp {
             } else if (command.equals("a")) {
                 addDataFile(selExperiment);
             } else if (command.equals("r")) {
-                removeDataFile(selExperiment);
+                removeFile(selExperiment);
             } else if (command.equals("m")) {
                 newDescription(selExperiment);
             } else {
@@ -81,7 +81,7 @@ public class DirectoryApp {
     }
 
     //Effect: prints range of numbers to select, if more than one experiment in directory.
-    // If no Experiments, does not print anything
+    // If no files, does not print anything
     public void printRange(Directory directory) {
         Integer length = directory.length();
         if (length > 0) {
@@ -89,6 +89,7 @@ public class DirectoryApp {
                     + length + " to open a file \n");
         }
     }
+
     //MODIFIES: this
     //EFFECTS: processes user command while in an experimental directory
     private void processExperimentDirectoryCommand(String command) {
@@ -147,22 +148,23 @@ public class DirectoryApp {
     //EFFECTS: displays all the experiments in an Experiment directory to user
     private void displayExperiments() {
         System.out.println("Experiments:");
-        for (Integer i = 1; i <= experimentDirectory.length(); i++) {
-            System.out.println(i + "] " + experimentDirectory.getFile(i).getName());
-        }
-        System.out.println("******************************************");
+        displayFiles(experimentDirectory);
     }
 
 
     //EFFECTS: displays all the data files in an experiment to user
     private void displayDataFiles(Experiment experiment) {
+        System.out.println(experiment.getName() + ":");
         System.out.println("description: " + experiment.getDescription());
-        System.out.println(experiment.getName() + " contains the following data files:");
-        for (Integer i = 1; i <= experiment.length(); i++) {
-            System.out.println(i + "] " + experiment.getFile(i).getName());
+        displayFiles(experiment);
+    }
+
+    //EFFECTS: displays all the experiments in a directory to user
+    private void displayFiles(Directory directory) {
+        for (Integer i = 1; i <= directory.length(); i++) {
+            System.out.println(i + "] " + directory.getFile(i).getName());
         }
         System.out.println("******************************************");
-        System.out.println("What data file would you like to examine?" + "\nEnter the corresponding # below:");
     }
 
     //MODIFIES: experimentDirectory
@@ -172,15 +174,6 @@ public class DirectoryApp {
         System.out.println("Enter name of new experiment:");
         String name = myObj.nextLine();
         experimentDirectory.addFile(new Experiment(name));
-    }
-
-    //MODIFIES: experimentDirectory
-    //EFFECTS: removes experiment from experiment directory
-    private void removeExperiment() {
-        Scanner myObj = new Scanner(System.in);
-        System.out.println("Enter # of experiment that you would like to remove:");
-        Integer number = Integer.parseInt(myObj.nextLine());
-        experimentDirectory.removeFile(number);
     }
 
     //MODIFIES: experimentDirectory
@@ -196,15 +189,15 @@ public class DirectoryApp {
         selExperiment.addFile(new GenericDataFile(name, data));
     }
 
-    //MODIFIES: experimentDirectory
-    //EFFECTS: removes data file to selected experiment in experiment directory
-    private void removeDataFile(Experiment selExperiment) {
+    //MODIFIES: Directory
+    //EFFECTS: removes file from selected directory
+    private void removeFile(Directory directory) {
         Scanner myObj = new Scanner(System.in);
 
-        System.out.println("Enter # of data file to remove:");
+        System.out.println("Enter # of file to remove:");
         Integer number = Integer.parseInt(myObj.nextLine());
 
-        selExperiment.removeFile(number);
+        directory.removeFile(number);
     }
 
     //MODIFIES: selected file
