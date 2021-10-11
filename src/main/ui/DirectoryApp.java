@@ -3,6 +3,7 @@ package ui;
 import model.Experiment;
 import model.ExperimentDirectory;
 import model.GenericDataFile;
+import model.RNAseqDataFile;
 import model.interfaces.Directory;
 import model.interfaces.NamedFile;
 
@@ -86,12 +87,16 @@ public class DirectoryApp {
     private void runDataFile(Experiment selExperiment, GenericDataFile file) {
         boolean keepGoing = true;
         Scanner myObj = new Scanner(System.in);
+        Boolean isRNAseqData = file instanceof RNAseqDataFile;
 
         String command;
 
         while (keepGoing) {
             System.out.println("*M* = modify description");
             System.out.println("*Q* = quit");
+            if (isRNAseqData) {
+                System.out.println("*C* = analyze differential gene expression");
+            }
             displayDataFile(file);
             command = myObj.nextLine();
             command = command.toLowerCase();
@@ -100,6 +105,8 @@ public class DirectoryApp {
                 keepGoing = false;
             } else if (command.equals("m")) {
                 newDescription(file);
+            } else if (command.equals("c") && isRNAseqData) {
+                countDiffGeneExpression((RNAseqDataFile) file);
             } else {
                 System.out.println("Invalid Command");
             }
@@ -150,6 +157,7 @@ public class DirectoryApp {
 
         Experiment experiment1 = new Experiment("Effect of pH on E. Coli");
         Experiment experiment2 = new Experiment("Effect of Temperature on E. Coli");
+        Experiment experiment3 = new Experiment("RNAseq");
 
         GenericDataFile dataFile1 = new GenericDataFile("trial 1, pH = 5", "sample survival rate = 98%");
         GenericDataFile dataFile2 = new GenericDataFile("trial 2, pH = 10", "sample survival rate = 13%");
@@ -157,14 +165,21 @@ public class DirectoryApp {
                 "sample survival rate = 100%");
         GenericDataFile dataFile4 = new GenericDataFile("trial 2, Temp = 100 F",
                 "sample survival rate = 10%");
+        RNAseqDataFile dataFile5 = new RNAseqDataFile("TF = NaC", "Analysis not run yet",
+                "data/RNAseqExampleFiles/Nac_RNASeq _ NoFC_v2.csv");
+        RNAseqDataFile dataFile6 = new RNAseqDataFile("TF = CsiR", "Analysis not run yet",
+                "data/RNAseqExampleFiles/CsiR_RNASeq _ NoFC_v2.csv");
 
         experiment1.addFile(dataFile1);
         experiment1.addFile(dataFile2);
         experiment2.addFile(dataFile3);
         experiment2.addFile(dataFile4);
+        experiment3.addFile(dataFile5);
+        experiment3.addFile(dataFile6);
 
         experimentDirectory.addFile(experiment1);
         experimentDirectory.addFile(experiment2);
+        experimentDirectory.addFile(experiment3);
     }
 
     //EFFECTS: displays all the experiments in an Experiment directory to user
@@ -242,5 +257,15 @@ public class DirectoryApp {
         String description = myObj.nextLine();
 
         selFile.setDescription(description);
+    }
+
+    private void countDiffGeneExpression(RNAseqDataFile file) {
+        Scanner myObj = new Scanner(System.in);
+
+        System.out.println("Enter significance threshold:");
+        String threshold = myObj.nextLine();
+
+        Integer numOfChanges = file.countSignificantChangesInGeneExpression(Float.parseFloat(threshold));
+        file.setData("# of significant changes @ threshold: " + threshold + " = " + numOfChanges);
     }
 }
