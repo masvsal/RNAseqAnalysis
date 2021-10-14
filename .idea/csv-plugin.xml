@@ -24,6 +24,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/data/RNAseqExampleFiles/CsiR_RNAseq_NoFC_v2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/RNAseqExampleFiles/Nac_RNASeq _ NoFC_v2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

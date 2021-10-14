@@ -7,6 +7,9 @@ import model.RNAseqDataFile;
 import model.interfaces.Directory;
 import model.interfaces.NamedFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 //file directory application
@@ -87,7 +90,7 @@ public class DirectoryApp {
     private void runDataFile(Experiment selExperiment, GenericDataFile file) {
         boolean keepGoing = true;
         Scanner myObj = new Scanner(System.in);
-        Boolean isRNAseqData = file instanceof RNAseqDataFile;
+        boolean isRNAseqData = file instanceof RNAseqDataFile;
 
         String command;
 
@@ -95,7 +98,8 @@ public class DirectoryApp {
             System.out.println("*M* = modify description");
             System.out.println("*Q* = quit");
             if (isRNAseqData) {
-                System.out.println("*C* = analyze differential gene expression");
+                System.out.println("*C* = count significant differential gene expression");
+                System.out.println("*P* = print significant differential gene expression");
             }
             displayDataFile(file);
             command = myObj.nextLine();
@@ -107,6 +111,8 @@ public class DirectoryApp {
                 newDescription(file);
             } else if (command.equals("c") && isRNAseqData) {
                 countDiffGeneExpression((RNAseqDataFile) file);
+            } else if (command.equals("p") && isRNAseqData) {
+                printDiffGeneExpression((RNAseqDataFile) file);
             } else {
                 System.out.println("Invalid Command");
             }
@@ -168,7 +174,7 @@ public class DirectoryApp {
         RNAseqDataFile dataFile5 = new RNAseqDataFile("TF = NaC", "Analysis not run yet",
                 "data/RNAseqExampleFiles/Nac_RNASeq _ NoFC_v2.csv");
         RNAseqDataFile dataFile6 = new RNAseqDataFile("TF = CsiR", "Analysis not run yet",
-                "data/RNAseqExampleFiles/CsiR_RNASeq _ NoFC_v2.csv");
+                "data/RNAseqExampleFiles/CsiR_RNAseq_NoFC_v2.csv");
 
         experiment1.addFile(dataFile1);
         experiment1.addFile(dataFile2);
@@ -198,11 +204,32 @@ public class DirectoryApp {
 
     //EFFECTS: displays the content of a data file to a user
     private void displayDataFile(GenericDataFile file) {
+        boolean isRNAseqData = file instanceof RNAseqDataFile;
         System.out.println("Name: " + file.getName());
         System.out.println("Description: " + file.getDescription());
         System.out.println("__________________________________________");
+        if (isRNAseqData) {
+            printRNAseqdata((RNAseqDataFile) file);
+        }
         System.out.println("Data: " + file.getData());
         System.out.println("******************************************");
+    }
+
+    //EFFECTS: prints first 10 rows of csv file referenced by RNAseq data file, gives user the option print the rest
+    private void printRNAseqdata(RNAseqDataFile file) {
+        try {
+            System.out.println("First 10 pieces of data:");
+            int counter = 0;
+            Scanner sc = new Scanner(new File(file.getPath()));
+            sc.useDelimiter(",");
+            while (sc.hasNext() && counter <= 11) {
+                String nextLine = sc.nextLine(); //grabs next line}
+                System.out.println(nextLine);
+                counter = counter + 1;
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("file not found");
+        }
     }
 
 
@@ -265,7 +292,21 @@ public class DirectoryApp {
         System.out.println("Enter significance threshold:");
         String threshold = myObj.nextLine();
 
-        Integer numOfChanges = file.countSignificantChangesInGeneExpression(Float.parseFloat(threshold));
+        Integer numOfChanges = file.countSigChangeExpression(Float.parseFloat(threshold));
         file.setData("# of significant changes @ threshold: " + threshold + " = " + numOfChanges);
+    }
+
+    private void printDiffGeneExpression(RNAseqDataFile file) {
+        Scanner myObj = new Scanner(System.in);
+
+        System.out.println("Enter significance threshold:");
+        String threshold = myObj.nextLine();
+
+        System.out.println("How many genes would you like to include in your search?");
+        String numOfGenes = myObj.nextLine();
+
+        ArrayList<ArrayList<String>> numOfChanges =
+                file.getGeneNamesWithSigChangeExpression(Float.parseFloat(threshold), Integer.parseInt(numOfGenes));
+        System.out.println(numOfChanges);
     }
 }

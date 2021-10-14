@@ -31,10 +31,11 @@ add description to experiments and data files (DONE)
 - problem: when I add an experiment, go into the experiment and quit out to experiment directory, 
 the experiment is gone. (FIXED, removed extra initialization)
 - reduce  code duplication in add/remove data files/experiments (partway done)
-- add new data file-level selection screen, first I need to reduce size of experiment and data file selection screens
+- add new data file-level selection screen (DONE)
 - abstract qPCR and RNAseq data (what are the fields, what operations to do to them)
-- add independent display data file method
-- add ability to modify data
-
+- add independent display data file method (DONE)
+- assign marker gene that can be used for marker comparison
+- search for above threshold
+- google fpKm
 
 
