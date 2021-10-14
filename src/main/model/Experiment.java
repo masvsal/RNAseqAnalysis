@@ -9,9 +9,10 @@ import java.util.LinkedList;
 // data files
 public class Experiment implements NamedFile, Directory {
 
-    private String name;                                    //name of Experiment
+    private String name;                                    //name of Experiment.
     private String description;                             //description of Experiment.
-    private LinkedList<GenericDataFile> listOfDataFiles;    //list of all the data files contained associated with experiment
+    private LinkedList<GenericDataFile> listOfDataFiles;    //list of all the data files contained associated
+                                                            // with experiment.
 
 
 

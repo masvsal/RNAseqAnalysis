@@ -64,7 +64,9 @@ public class RNAseqDataFile extends GenericDataFile implements NamedFile {
     //REQUIRES: threshold > 0, numOfGenes >= 0
     //EFFECT: returns a 2d array with the name and fold change of a given number of genes in the given file
     // with fold change >= to the given threshold. If numOfGenes == -1, return all genes with a significant change
-    public ArrayList<ArrayList<java.lang.String>> getGeneNamesWithSigChangeExpression(float threshold, Integer numOfGenes) {
+    public ArrayList<ArrayList<java.lang.String>> getGeneNamesWithSigChangeExpression(float threshold,
+                                                                                      Integer numOfGenes) {
+
         ArrayList<ArrayList<java.lang.String>> geneNameAndFoldChange = new ArrayList<>();
         int counter = 0;
         try {

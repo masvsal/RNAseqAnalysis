@@ -107,15 +107,22 @@ public class DirectoryApp {
 
             if (command.equals("q")) {
                 keepGoing = false;
-            } else if (command.equals("m")) {
-                newDescription(file);
-            } else if (command.equals("c") && isRNAseqData) {
-                countDiffGeneExpression((RNAseqDataFile) file);
-            } else if (command.equals("p") && isRNAseqData) {
-                printDiffGeneExpression((RNAseqDataFile) file);
             } else {
-                System.out.println("Invalid Command");
+                interpretDataFileCommand(command, file, isRNAseqData);
             }
+        }
+    }
+
+
+    private void interpretDataFileCommand(String command, GenericDataFile file, Boolean isRNAseqData) {
+        if (command.equals("m")) {
+            newDescription(file);
+        } else if (command.equals("c") && isRNAseqData) {
+            countDiffGeneExpression((RNAseqDataFile) file);
+        } else if (command.equals("p") && isRNAseqData) {
+            printDiffGeneExpression((RNAseqDataFile) file);
+        } else {
+            System.out.println("Invalid Command");
         }
     }
 
