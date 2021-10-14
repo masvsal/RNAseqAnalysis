@@ -87,6 +87,12 @@ public class RNAseqDataFileTest {
         assertEquals(0, dataFile.countSigChangeExpression((float)2.0));
     }
 
+    //0 WT and Challenge condition detected
+    @Test
+    public void testcountSignificantChangesInGeneExpression0DetectedThreshold2() {
+        dataFile.setPath("data/RNAseqDataFileTests/0Detected.csv");
+        assertEquals(2, dataFile.countSigChangeExpression((float)2.0));
+    }
     //blank excel file
     @Test
     public void testcountSignificantChangesInGeneExpressionNoDataDetected0() {}
@@ -155,6 +161,25 @@ public class RNAseqDataFileTest {
     public void testGetGeneNamesWithSigChangeInvalidPath() {
         dataFile.setPath("data/RNAseqDataFileTests/InvalidPath.csv");
         assertEquals(new ArrayList<>(), dataFile.getGeneNamesWithSigChangeExpression((float) 2.0, 10));
+    }
+
+    //0 WT and Challenge condition detected
+    @Test
+    public void testGetGeneNamesWithSigChangeExpression0DetectedThreshold2() {
+        dataFile.setPath("data/RNAseqDataFileTests/0Detected.csv");
+
+        ArrayList<String> listArray1 = new ArrayList<>();
+        listArray1.add("yidP");
+        listArray1.add("-2.0");
+
+        ArrayList<String> listArray2 = new ArrayList<>();
+        listArray1.add("yidQ");
+        listArray1.add("-10.0");
+
+        arrayNameFoldChange.add(listArray1);
+        arrayNameFoldChange.add(listArray2);
+
+        assertEquals(2, dataFile.countSigChangeExpression((float)2.0));
     }
 
     //file with 2 borderline significant changes in gene expression, threshold 2.0, all genes and first 2 genes
