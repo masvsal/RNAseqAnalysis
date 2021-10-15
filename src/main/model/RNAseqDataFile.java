@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 import static java.lang.Math.abs;
 
-//a subtype of the datafile class. Stores a reference to and interacts with RNAseq output file,
+//a subtype of the datafile class. Stores a reference to, and interacts with, RNAseq output file.
 
 public class RNAseqDataFile extends GenericDataFile implements NamedFile {
     private java.lang.String path;          //relative path to RNAseq output file (.csv)
@@ -80,8 +80,8 @@ public class RNAseqDataFile extends GenericDataFile implements NamedFile {
             while (sc.hasNext() && ((counter < numOfGenes) || (numOfGenes == -1))) {
 
                 java.lang.String nextLine = sc.nextLine(); //grabs next line
-                java.lang.String[] arrayOfLine = nextLine.split(",", 4);
-                Float foldchange = isThresholdExceeded(arrayOfLine, threshold);
+                java.lang.String[] arrayOfLine = nextLine.split(",", 4); //splits line into array
+                Float foldchange = isThresholdExceeded(arrayOfLine, threshold); //gets fold change if exceeded
 
                 if (abs(foldchange) > (float) 1) {
                     ArrayList<java.lang.String> newArrayList = new ArrayList<>();

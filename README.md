@@ -4,27 +4,21 @@
 
 Questions to Answer:
 - **What will the Application Do?** </br>
-It will be a file system that a biologist might use to keep track of their experiments. Additionally, it will have the functionality to perform a simply analysis of any RNAseq data file in its file system. 
+It will be a file system that a biologist might use to keep track of their experiments and data files. Additionally, it will have the functionality to perform a simple analysis of any *RNAseq* data file in its file system. A short summary of the RNAseq technique is provided below. 
 - **Who will use it?** </br>
 Bioinformaticians might use it in their day-to-day work to keep track of their work and automate the tedious task of analyzing RNA sequence data.
 - **Why is this project of interest to you?** </br>
 I would like to work in bioinformatics so I want to understand the basic workflow of a typical bioinformatic program.
-
-Use at least two of:
-- bold/italic
-- title/subtitle
-- bulleted list
-
-An example of text with **bold** and *italic* fonts.  Note that the IntelliJ markdown previewer doesn't seem to render 
-the bold and italic fonts correctly but they will appear correctly on GitHub.
 
 ####User Stories
 
 - As a user, I want to add be able to add or remove an experiment to the directory of my experiments
 - As a user, I want to be able to change the description of an experiment
 - As a user, I want to be able to add or remove a data file to an experiment
-- As a user, I want to set a significance threshold and find significant differences between two RNAseq data files contained within one of my experiments.
-####TODO
+- As a user, I want to be able to choose a significance threshold and find significant differences between the gene expression of a control sample and a challenge sample within an RNAseq data file.
+
+
+####TODO (For Personal Use)
 
 - add the following user interaction: Add/remove experiments (DONE), add/remove data files (DONE), 
 add description to experiments and data files (DONE)

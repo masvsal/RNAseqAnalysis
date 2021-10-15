@@ -24,7 +24,7 @@ public class DirectoryApp {
     }
 
     //MODIFIES: this
-    //EFFECTS: processes user input for experiment directory
+    //EFFECTS: displays experiment directory menu and processes user input
     private void runExperimentDirectory() {
         boolean keepGoing = true;
         Scanner myObj = new Scanner(System.in);
@@ -55,7 +55,7 @@ public class DirectoryApp {
     }
 
     //MODIFIES: this
-    //EFFECTS: processes user input inside of an experiment
+    //EFFECTS: displays experiment menu and processes user input
     private void runExperiment(Experiment selExperiment) {
         boolean keepGoing = true;
         Scanner myObj = new Scanner(System.in);
@@ -86,7 +86,7 @@ public class DirectoryApp {
 
 
     //MODIFIES: this
-    //EFFECTS: processes user input inside of an experiment
+    //EFFECTS: displays experiment data file menu and processes user input inside of an experiment
     private void runDataFile(Experiment selExperiment, GenericDataFile file) {
         boolean keepGoing = true;
         Scanner myObj = new Scanner(System.in);
@@ -113,8 +113,7 @@ public class DirectoryApp {
         }
     }
 
-    //EFFECT: displays menu that only quits when "q" inputted
-
+    //EFFECT: displays menu that exits when "q" is inputted
     private void runQuitMenu() {
         boolean keepGoing = true;
         Scanner myObj = new Scanner(System.in);
@@ -131,8 +130,9 @@ public class DirectoryApp {
             }
         }
     }
-
+    //MODIFIES: this
     //EFFECT: interprets user commands given within data file selection menu
+
     private void interpretDataFileCommand(String command, GenericDataFile file, Boolean isRNAseqData) {
         if (command.equals("m")) {
             newDescription(file);
@@ -142,10 +142,11 @@ public class DirectoryApp {
             printDiffGeneExpression((RNAseqDataFile) file);
         } else {
             System.out.println("Invalid Command");
+            runQuitMenu();
         }
     }
     //MODIFIES: this
-    //Effect: prints range of numbers to select, if more than one experiment in directory.
+    //Effect: prints numerical range of selectable files in directory, if more than one file.
     // If no files, does not print anything
 
     public void printRange(Directory directory) {
@@ -158,6 +159,7 @@ public class DirectoryApp {
 
     //MODIFIES: this
     //EFFECTS: processes user command while in an experimental directory
+
     private void processExperimentDirectoryCommand(String command) {
         try {
             Integer intCommand = Integer.parseInt(command);
@@ -169,7 +171,7 @@ public class DirectoryApp {
                 System.out.println("\nInvalid Selection: Out of Range \nPlease Select Again");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid Command");
+            System.out.println("Invalid Command: Please use a number");
             runQuitMenu();
         }
     }
@@ -279,7 +281,7 @@ public class DirectoryApp {
         System.out.println("******************************************");
     }
 
-    //MODIFIES: experimentDirectory
+    //MODIFIES: This
     //EFFECTS: adds experiment to experiment directory
     private void addExperiment() {
         Scanner myObj = new Scanner(System.in);
@@ -290,7 +292,7 @@ public class DirectoryApp {
         runQuitMenu();
     }
 
-    //MODIFIES: experimentDirectory
+    //MODIFIES: This
     //EFFECTS: adds data file to selected experiment in experiment directory
     private void addDataFile(Experiment selExperiment) {
         Scanner myObj = new Scanner(System.in);
@@ -305,20 +307,24 @@ public class DirectoryApp {
         runQuitMenu();
     }
 
-    //MODIFIES: Directory
+    //MODIFIES: Directory passed to method
     //EFFECTS: removes file from selected directory
     private void removeFile(Directory directory) {
         Scanner myObj = new Scanner(System.in);
 
         System.out.println("Enter # of file to remove:");
         Integer number = Integer.parseInt(myObj.nextLine());
-
-        directory.removeFile(number);
-        System.out.println("file successfully removed!");
-        runQuitMenu();
+        try {
+            directory.removeFile(number);
+            System.out.println("file successfully removed!");
+            runQuitMenu();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid Command: number out of range");
+            runQuitMenu();
+        }
     }
 
-    //MODIFIES: selected file
+    //MODIFIES: Named file passed to method
     //EFFECTS: user specifies new description of file
     private void newDescription(NamedFile selFile) {
         Scanner myObj = new Scanner(System.in);

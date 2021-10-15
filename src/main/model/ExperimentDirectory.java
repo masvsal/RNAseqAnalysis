@@ -4,10 +4,10 @@ import model.interfaces.Directory;
 
 import java.util.LinkedList;
 
-//represents a directory of all the Experiments in system. Experiments are stored as a linked list
+//represents a directory of all the Experiments in system.
 
 public class ExperimentDirectory implements Directory {
-    private LinkedList<Experiment> listofExperiments;
+    private LinkedList<Experiment> listofExperiments;          //experiments contained within the experiment directory
 
 
     //EFFECT: instantiates new instance of the Experiment Directory class with an empty list of experiments
