@@ -209,7 +209,7 @@ public class RNAseqDataFileTest {
         arrayNameFoldChange.add(listArray1);
         arrayNameFoldChange.add(listArray2);
 
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, 0));
+        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, -1));
         assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, 2));
     }
 
@@ -228,7 +228,7 @@ public class RNAseqDataFileTest {
         //        {"yidR", "-2.0"},{"yidX", "2.666"},{"yidZ", "3.87"},{"yieE", "2.425"},{"yieF", "2.0"},
         //        {"yieG", "9.922"}};
         list5Up5Down();
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)1.0, 0));
+        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)1.0, -1));
     }
     //all significant changes in gene expression, threshold 1.0, first 3 genes
     @Test

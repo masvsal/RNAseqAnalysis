@@ -113,7 +113,26 @@ public class DirectoryApp {
         }
     }
 
+    //EFFECT: displays menu that only quits when "q" inputted
 
+    private void runQuitMenu() {
+        boolean keepGoing = true;
+        Scanner myObj = new Scanner(System.in);
+
+        String command;
+
+        while (keepGoing) {
+            System.out.println("*Q* = quit to menu");
+            command = myObj.nextLine();
+            command = command.toLowerCase();
+
+            if (command.equals("q")) {
+                keepGoing = false;
+            }
+        }
+    }
+
+    //EFFECT: interprets user commands given within data file selection menu
     private void interpretDataFileCommand(String command, GenericDataFile file, Boolean isRNAseqData) {
         if (command.equals("m")) {
             newDescription(file);
@@ -125,9 +144,10 @@ public class DirectoryApp {
             System.out.println("Invalid Command");
         }
     }
-
+    //MODIFIES: this
     //Effect: prints range of numbers to select, if more than one experiment in directory.
     // If no files, does not print anything
+
     public void printRange(Directory directory) {
         Integer length = directory.length();
         if (length > 0) {
@@ -139,26 +159,36 @@ public class DirectoryApp {
     //MODIFIES: this
     //EFFECTS: processes user command while in an experimental directory
     private void processExperimentDirectoryCommand(String command) {
-        Integer intCommand = Integer.parseInt(command);
-        if (intCommand <= experimentDirectory.length()) {
-            Experiment selExperiment = experimentDirectory.getFile(intCommand);
-            runExperiment(selExperiment);
+        try {
+            Integer intCommand = Integer.parseInt(command);
+            if (intCommand <= experimentDirectory.length()) {
+                Experiment selExperiment = experimentDirectory.getFile(intCommand);
+                runExperiment(selExperiment);
 
-        } else {
-            System.out.println("\nInvalid Selection: Out of Range \nPlease Select Again");
+            } else {
+                System.out.println("\nInvalid Selection: Out of Range \nPlease Select Again");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Command");
+            runQuitMenu();
         }
     }
 
     //MODIFIES: this
     //EFFECTS: processes user command while in an experiment
     private void processExperimentCommand(String command, Experiment selExperiment) {
-        Integer intCommand = Integer.parseInt(command);
-        if (intCommand <= selExperiment.length()) {
-            GenericDataFile selDataFile = selExperiment.getFile(intCommand);
-            runDataFile(selExperiment, selDataFile);
+        try {
+            Integer intCommand = Integer.parseInt(command);
+            if (intCommand <= selExperiment.length()) {
+                GenericDataFile selDataFile = selExperiment.getFile(intCommand);
+                runDataFile(selExperiment, selDataFile);
 
-        } else {
-            System.out.println("\nInvalid Selection: Out of Range \nPlease Select Again");
+            } else {
+                System.out.println("\nInvalid Selection: Out of Range \nPlease Select Again");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Command");
+            runQuitMenu();
         }
     }
 
@@ -222,10 +252,10 @@ public class DirectoryApp {
         System.out.println("******************************************");
     }
 
-    //EFFECTS: prints first 10 rows of csv file referenced by RNAseq data file, gives user the option print the rest
+    //EFFECTS: prints first 10 rows of csv file referenced by RNAseq data file
     private void printRNAseqdata(RNAseqDataFile file) {
         try {
-            System.out.println("First 10 pieces of data:");
+            System.out.println("First 10 genes:");
             int counter = 0;
             Scanner sc = new Scanner(new File(file.getPath()));
             sc.useDelimiter(",");
@@ -256,6 +286,8 @@ public class DirectoryApp {
         System.out.println("Enter name of new experiment:");
         String name = myObj.nextLine();
         experimentDirectory.addFile(new Experiment(name));
+        System.out.println("Experiment succesfully added!");
+        runQuitMenu();
     }
 
     //MODIFIES: experimentDirectory
@@ -269,6 +301,8 @@ public class DirectoryApp {
         String data = myObj.nextLine();
 
         selExperiment.addFile(new GenericDataFile(name, data));
+        System.out.println("Data file successfully added!");
+        runQuitMenu();
     }
 
     //MODIFIES: Directory
@@ -280,6 +314,8 @@ public class DirectoryApp {
         Integer number = Integer.parseInt(myObj.nextLine());
 
         directory.removeFile(number);
+        System.out.println("file successfully removed!");
+        runQuitMenu();
     }
 
     //MODIFIES: selected file
@@ -291,8 +327,11 @@ public class DirectoryApp {
         String description = myObj.nextLine();
 
         selFile.setDescription(description);
+        System.out.println("Description successfully changed!");
+        runQuitMenu();
     }
 
+    //EFFECT:  uses user-specified threshold to count the number of genes that meet or exceed fold-change threshold
     private void countDiffGeneExpression(RNAseqDataFile file) {
         Scanner myObj = new Scanner(System.in);
 
@@ -303,6 +342,8 @@ public class DirectoryApp {
         file.setData("# of significant changes @ threshold: " + threshold + " = " + numOfChanges);
     }
 
+    //EFFECT:  uses user-specified threshold and number of genes (*n*) to:
+    //print the Name and FC of *n* genes that meet or exceed fold-change threshold
     private void printDiffGeneExpression(RNAseqDataFile file) {
         Scanner myObj = new Scanner(System.in);
 
@@ -310,10 +351,19 @@ public class DirectoryApp {
         String threshold = myObj.nextLine();
 
         System.out.println("How many genes would you like to include in your search?");
+        System.out.println("-1 = All genes");
+
         String numOfGenes = myObj.nextLine();
 
         ArrayList<ArrayList<String>> numOfChanges =
                 file.getGeneNamesWithSigChangeExpression(Float.parseFloat(threshold), Integer.parseInt(numOfGenes));
-        System.out.println(numOfChanges);
+        int counter = 0;
+        for (ArrayList<String> gene: numOfChanges) {
+            counter = counter + 1;
+            System.out.println("Gene " + counter + ": " + gene);
+        }
+        runQuitMenu();
     }
+    //EFFECT: displays menu that only quits when "q" inputted
+
 }

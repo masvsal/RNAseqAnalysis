@@ -1,6 +1,6 @@
 package model;
 
-import com.sun.org.apache.xpath.internal.operations.String;
+
 import model.interfaces.NamedFile;
 
 import java.io.*;
@@ -9,15 +9,16 @@ import java.util.Scanner;
 
 import static java.lang.Math.abs;
 
-//a subtype of the datafile class
+//a subtype of the datafile class. Stores a reference to and interacts with RNAseq output file,
 
 public class RNAseqDataFile extends GenericDataFile implements NamedFile {
-    private java.lang.String path;
+    private java.lang.String path;          //relative path to RNAseq output file (.csv)
 
 
-    //REQUIRES: path must be not be static, must point to a .csv file with format:
-    // row 1: symbol (String), row 2: Operon (String)
-    // row 3: Challenge Condition RNA copy # (Integer), row 4: WT RNA copy # (Integer)
+    //REQUIRES: relative path from content root->file pointing .csv file with the following format:
+    //row 1: Header (not included in analysis)
+    // Column 1: symbol (String), Column 2: Operon (String), column 3: Challenge Condition RNA copy # (Float)
+    // column 4: WT RNA copy # (Float))
     //EFFECT: instantiates a new instance of RNAseqDataFile
     public RNAseqDataFile(java.lang.String name, java.lang.String data, java.lang.String path) {
         super(name, data);
@@ -35,7 +36,8 @@ public class RNAseqDataFile extends GenericDataFile implements NamedFile {
         this.path = path;
     }
 
- /*   //MODIFIES: .csv file referenced in this object's path field
+ /*   IGNORE:
+    //MODIFIES: .csv file referenced in this object's path field
     //EFFECT: adds a row to .csv file using given gene name, operon, WT copy number, and Challenge copy number
     public void newRow(String name, String operon, Float wildTypeCopyNumber, Float challengeCopyNumber) {}*/
 
@@ -62,8 +64,9 @@ public class RNAseqDataFile extends GenericDataFile implements NamedFile {
     }
 
     //REQUIRES: threshold > 0, numOfGenes >= 0
-    //EFFECT: returns a 2d array with the name and fold change of a given number of genes in the given file
-    // with fold change >= to the given threshold. If numOfGenes == -1, return all genes with a significant change
+    //EFFECT: returns an array list containing n array lists, where n is the given number of genes
+    // Each sub-list contains name & fold change of a gene in the RNAseq file with fold change >= to the given threshold
+    // If numOfGenes == -1, include all genes with fold change >= threshold.
     public ArrayList<ArrayList<java.lang.String>> getGeneNamesWithSigChangeExpression(float threshold,
                                                                                       Integer numOfGenes) {
 
@@ -74,7 +77,7 @@ public class RNAseqDataFile extends GenericDataFile implements NamedFile {
             sc.useDelimiter(",");
             java.lang.String headerline = sc.nextLine();
 
-            while (sc.hasNext() && ((counter < numOfGenes) || (numOfGenes == 0))) {
+            while (sc.hasNext() && ((counter < numOfGenes) || (numOfGenes == -1))) {
 
                 java.lang.String nextLine = sc.nextLine(); //grabs next line
                 java.lang.String[] arrayOfLine = nextLine.split(",", 4);
@@ -97,7 +100,7 @@ public class RNAseqDataFile extends GenericDataFile implements NamedFile {
     }
 
 
-    //EFFECT: if difference between WT and Challenge copy # in .csv file are > threshold, return 1. Else, return 0.
+    //EFFECT: If fold change of given row >= threshold, return fold change. Else, return 0.
     private Float isThresholdExceeded(java.lang.String[] arrayOfLine, Float threshold) {
         float chalCondtnCopyNum = Float.parseFloat(arrayOfLine[2]);
         float wildTypeCopyNum = Float.parseFloat(arrayOfLine[3]);
@@ -114,6 +117,9 @@ public class RNAseqDataFile extends GenericDataFile implements NamedFile {
             return (float) 0;
         }
     }
+    //calculate the fold change between two given float values
+    //fold change = (challenge condition copy number)/(wild type copy number).
+    // If less than 1: negative reciprocal of fold change
 
     private Float calculateFoldChange(Float chalCondtnCopyNum, Float wildTypeCopyNum) {
         float foldChange = chalCondtnCopyNum / wildTypeCopyNum;
