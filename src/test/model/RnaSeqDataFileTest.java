@@ -3,13 +3,12 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RNAseqDataFileTest {
-    RNAseqDataFile dataFile;
+public class RnaSeqDataFileTest {
+    RnaSeqDataFile dataFile;
     ArrayList<ArrayList<String>> arrayNameFoldChange;
 
     //tests for count number of genes w ∆ in gene expression
@@ -19,7 +18,7 @@ public class RNAseqDataFileTest {
 
 
         dataFile =
-                new RNAseqDataFile("test name", "test data", "data/RNAseqDataFileTests/NoData.csv");
+                new RnaSeqDataFile("test name", "test data", "data/RNAseqDataFileTests/NoData.csv");
 
         assertEquals(0,dataFile.countSigChangeExpression((float)2.0));
         assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, 0));

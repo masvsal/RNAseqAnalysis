@@ -3,7 +3,7 @@ package ui;
 import model.Experiment;
 import model.ExperimentDirectory;
 import model.GenericDataFile;
-import model.RNAseqDataFile;
+import model.RnaSeqDataFile;
 import model.interfaces.Directory;
 import model.interfaces.NamedFile;
 
@@ -90,7 +90,7 @@ public class DirectoryApp {
     private void runDataFile(Experiment selExperiment, GenericDataFile file) {
         boolean keepGoing = true;
         Scanner myObj = new Scanner(System.in);
-        boolean isRNAseqData = file instanceof RNAseqDataFile;
+        boolean isRNAseqData = file instanceof RnaSeqDataFile;
 
         String command;
 
@@ -137,9 +137,9 @@ public class DirectoryApp {
         if (command.equals("m")) {
             newDescription(file);
         } else if (command.equals("c") && isRNAseqData) {
-            countDiffGeneExpression((RNAseqDataFile) file);
+            countDiffGeneExpression((RnaSeqDataFile) file);
         } else if (command.equals("p") && isRNAseqData) {
-            printDiffGeneExpression((RNAseqDataFile) file);
+            printDiffGeneExpression((RnaSeqDataFile) file);
         } else {
             System.out.println("Invalid Command");
             runQuitMenu();
@@ -210,9 +210,9 @@ public class DirectoryApp {
                 "sample survival rate = 100%");
         GenericDataFile dataFile4 = new GenericDataFile("trial 2, Temp = 100 F",
                 "sample survival rate = 10%");
-        RNAseqDataFile dataFile5 = new RNAseqDataFile("TF = NaC", "Analysis not run yet",
+        RnaSeqDataFile dataFile5 = new RnaSeqDataFile("TF = NaC", "Analysis not run yet",
                 "data/RNAseqExampleFiles/Nac_RNASeq _ NoFC_v2.csv");
-        RNAseqDataFile dataFile6 = new RNAseqDataFile("TF = CsiR", "Analysis not run yet",
+        RnaSeqDataFile dataFile6 = new RnaSeqDataFile("TF = CsiR", "Analysis not run yet",
                 "data/RNAseqExampleFiles/CsiR_RNAseq_NoFC_v2.csv");
 
         experiment1.addFile(dataFile1);
@@ -243,19 +243,19 @@ public class DirectoryApp {
 
     //EFFECTS: displays the content of a data file to a user
     private void displayDataFile(GenericDataFile file) {
-        boolean isRNAseqData = file instanceof RNAseqDataFile;
+        boolean isRNAseqData = file instanceof RnaSeqDataFile;
         System.out.println("Name: " + file.getName());
         System.out.println("Description: " + file.getDescription());
         System.out.println("__________________________________________");
         if (isRNAseqData) {
-            printRNAseqdata((RNAseqDataFile) file);
+            printRnaSeqData((RnaSeqDataFile) file);
         }
         System.out.println("Data: " + file.getData());
         System.out.println("******************************************");
     }
 
     //EFFECTS: prints first 10 rows of csv file referenced by RNAseq data file
-    private void printRNAseqdata(RNAseqDataFile file) {
+    private void printRnaSeqData(RnaSeqDataFile file) {
         try {
             System.out.println("First 10 genes:");
             int counter = 0;
@@ -338,7 +338,7 @@ public class DirectoryApp {
     }
 
     //EFFECT:  uses user-specified threshold to count the number of genes that meet or exceed fold-change threshold
-    private void countDiffGeneExpression(RNAseqDataFile file) {
+    private void countDiffGeneExpression(RnaSeqDataFile file) {
         Scanner myObj = new Scanner(System.in);
 
         System.out.println("Enter significance threshold:");
@@ -350,7 +350,7 @@ public class DirectoryApp {
 
     //EFFECT:  uses user-specified threshold and number of genes (*n*) to:
     //print the Name and FC of *n* genes that meet or exceed fold-change threshold
-    private void printDiffGeneExpression(RNAseqDataFile file) {
+    private void printDiffGeneExpression(RnaSeqDataFile file) {
         Scanner myObj = new Scanner(System.in);
 
         System.out.println("Enter significance threshold:");

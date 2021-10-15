@@ -11,7 +11,7 @@ import static java.lang.Math.abs;
 
 //a subtype of the datafile class. Stores a reference to, and interacts with, RNAseq output file.
 
-public class RNAseqDataFile extends GenericDataFile implements NamedFile {
+public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     private java.lang.String path;          //relative path to RNAseq output file (.csv)
 
 
@@ -20,7 +20,7 @@ public class RNAseqDataFile extends GenericDataFile implements NamedFile {
     // Column 1: symbol (String), Column 2: Operon (String), column 3: Challenge Condition RNA copy # (Float)
     // column 4: WT RNA copy # (Float))
     //EFFECT: instantiates a new instance of RNAseqDataFile
-    public RNAseqDataFile(java.lang.String name, java.lang.String data, java.lang.String path) {
+    public RnaSeqDataFile(java.lang.String name, java.lang.String data, java.lang.String path) {
         super(name, data);
         this.path = path;
     }
