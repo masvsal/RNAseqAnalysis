@@ -10,12 +10,17 @@ Bioinformaticians might use it in their day-to-day work to keep track of their w
 - **Why is this project of interest to you?** </br>
 I would like to work in bioinformatics so I want to understand the basic workflow of a typical bioinformatic program.
 
-####User Stories
+####User Stories - Phase 1 
 
 - As a user, I want to add be able to add or remove an experiment to the directory of my experiments
 - As a user, I want to be able to change the description of an experiment
 - As a user, I want to be able to add or remove a data file to an experiment
 - As a user, I want to be able to choose a significance threshold and find significant differences between the gene expression of a control sample and a challenge sample within an RNAseq data file.
+
+####User Stories - Phase 2
+
+- As a user, I want to be able to assign an experiment directory to a username and save it to file
+- As a user, I want to be able to reload the experiment directory assigned to my username from file
 
 
 ####TODO (For Personal Use)
