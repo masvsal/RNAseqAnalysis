@@ -67,16 +67,16 @@ public class RnaSeqDataFileTest {
         listArray10.add("yieG");
         listArray10.add("9.922066");
 
-        arrayNameFoldChange.add(listArray1);
-        arrayNameFoldChange.add(listArray2);
-        arrayNameFoldChange.add(listArray3);
         arrayNameFoldChange.add(listArray4);
-        arrayNameFoldChange.add(listArray5);
-        arrayNameFoldChange.add(listArray6);
-        arrayNameFoldChange.add(listArray7);
-        arrayNameFoldChange.add(listArray8);
-        arrayNameFoldChange.add(listArray9);
         arrayNameFoldChange.add(listArray10);
+        arrayNameFoldChange.add(listArray7);
+        arrayNameFoldChange.add(listArray2);
+        arrayNameFoldChange.add(listArray6);
+        arrayNameFoldChange.add(listArray8);
+        arrayNameFoldChange.add(listArray3);
+        arrayNameFoldChange.add(listArray5);
+        arrayNameFoldChange.add(listArray9);
+        arrayNameFoldChange.add(listArray1);
 
     }
     //invalid path
@@ -246,9 +246,9 @@ public class RnaSeqDataFileTest {
         listArray3.add("yidP");
         listArray3.add("-2.051282");
 
-        arrayNameFoldChange.add(listArray1);
         arrayNameFoldChange.add(listArray2);
         arrayNameFoldChange.add(listArray3);
+        arrayNameFoldChange.add(listArray1);
 
         assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)1.0, 3));
     }
@@ -287,6 +287,10 @@ public class RnaSeqDataFileTest {
 
         assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)5.0, 1));
     }
+
+    //test toJson
+    //test with path
+
 
 
 

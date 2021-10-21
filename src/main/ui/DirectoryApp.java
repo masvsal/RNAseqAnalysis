@@ -6,9 +6,12 @@ import model.GenericDataFile;
 import model.RnaSeqDataFile;
 import model.interfaces.Directory;
 import model.interfaces.NamedFile;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,8 +22,22 @@ public class DirectoryApp {
 
     //EFFECTS: runs the file directory application
     public DirectoryApp() {
-        init();
+        setup();
         runExperimentDirectory();
+    }
+
+    //MODIFIES: this
+    //EFFECT: gives the user the option to reload saved directory, if not: initializes default files
+    private void setup() {
+        Scanner myObj = new Scanner(System.in);
+        System.out.println("BOOTING UP...");
+        System.out.println("Would you like to reload saved experiment directory? \n Y/N");
+        String command = myObj.nextLine();
+        if (command.equals("y")) {
+            reload();
+        } else {
+            init();
+        }
     }
 
     //MODIFIES: this
@@ -34,6 +51,7 @@ public class DirectoryApp {
             System.out.println("Welcome to the file explorer! :) \n");
             System.out.println("*A* = add Experiment");
             System.out.println("*R* = remove Experiment");
+            System.out.println("*S* = save file");
             System.out.println("*Q* = quit");
             printRange(experimentDirectory);
             displayExperiments();
@@ -99,7 +117,7 @@ public class DirectoryApp {
             System.out.println("*Q* = quit");
             if (isRNAseqData) {
                 System.out.println("*C* = count significant differential gene expression");
-                System.out.println("*P* = print significant differential gene expression");
+                System.out.println("*P* = print x genes with significant differential gene expression (high to low)");
             }
             displayDataFile(file);
             command = myObj.nextLine();
@@ -161,18 +179,20 @@ public class DirectoryApp {
     //EFFECTS: processes user command while in an experimental directory
 
     private void processExperimentDirectoryCommand(String command) {
-        try {
-            Integer intCommand = Integer.parseInt(command);
-            if (intCommand <= experimentDirectory.length()) {
+        if (command.equals("s")) {
+            saveFile();
+        } else {
+            try {
+                Integer intCommand = Integer.parseInt(command);
                 Experiment selExperiment = experimentDirectory.getFile(intCommand);
                 runExperiment(selExperiment);
-
-            } else {
-                System.out.println("\nInvalid Selection: Out of Range \nPlease Select Again");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid Command: Please use a number");
+                runQuitMenu();
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Invalid Command: out of range");
+                runQuitMenu();
             }
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid Command: Please use a number");
-            runQuitMenu();
         }
     }
 
@@ -181,15 +201,14 @@ public class DirectoryApp {
     private void processExperimentCommand(String command, Experiment selExperiment) {
         try {
             Integer intCommand = Integer.parseInt(command);
-            if (intCommand <= selExperiment.length()) {
-                GenericDataFile selDataFile = selExperiment.getFile(intCommand);
-                runDataFile(selExperiment, selDataFile);
+            GenericDataFile selDataFile = selExperiment.getFile(intCommand);
+            runDataFile(selExperiment, selDataFile);
 
-            } else {
-                System.out.println("\nInvalid Selection: Out of Range \nPlease Select Again");
-            }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid Command");
+            System.out.println("Invalid Command: please use a number");
+            runQuitMenu();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid Command: out of range");
             runQuitMenu();
         }
     }
@@ -285,9 +304,11 @@ public class DirectoryApp {
     //EFFECTS: adds experiment to experiment directory
     private void addExperiment() {
         Scanner myObj = new Scanner(System.in);
+
         System.out.println("Enter name of new experiment:");
         String name = myObj.nextLine();
         experimentDirectory.addFile(new Experiment(name));
+
         System.out.println("Experiment succesfully added!");
         runQuitMenu();
     }
@@ -364,12 +385,39 @@ public class DirectoryApp {
         ArrayList<ArrayList<String>> numOfChanges =
                 file.getGeneNamesWithSigChangeExpression(Float.parseFloat(threshold), Integer.parseInt(numOfGenes));
         int counter = 0;
+
         for (ArrayList<String> gene: numOfChanges) {
             counter = counter + 1;
             System.out.println("Gene " + counter + ": " + gene);
         }
         runQuitMenu();
     }
+
     //EFFECT: displays menu that only quits when "q" inputted
 
+    private void saveFile() {
+        try {
+            JsonWriter writer = new JsonWriter("data/Persistence/ExperimentDirectory.json");
+            writer.open();
+            writer.write(experimentDirectory);
+            writer.close();
+            System.out.println("File succesfully saved!");
+        } catch (IOException e) {
+            System.out.println("Error: Json file not found");
+        }
+        runQuitMenu();
+    }
+
+    //EFFECT: loads experiment directory from file
+    private void reload() {
+        JsonReader reader = new JsonReader("data/Persistence/ExperimentDirectory.json");
+        try {
+            experimentDirectory = reader.read();
+
+        } catch (IOException e) {
+            System.out.println("Error: path not valid");
+        }
+    }
 }
+
+

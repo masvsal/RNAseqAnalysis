@@ -1,9 +1,13 @@
 package model;
 
 import model.interfaces.NamedFile;
+import org.json.JSONObject;
+import persistence.Writable;
+
+import java.util.Objects;
 
 //represents a nondescript data file having a name, description and data. Data is stored as a string.
-public class GenericDataFile implements NamedFile {
+public class GenericDataFile implements NamedFile, Writable {
 
     private String name;            //name of data file
     private String description;     //description of content of data file, not required
@@ -13,6 +17,7 @@ public class GenericDataFile implements NamedFile {
     public GenericDataFile(String name, String data) {
         this.name = name;
         this.data = data;
+        this.description = "";
     }
 
 
@@ -24,7 +29,7 @@ public class GenericDataFile implements NamedFile {
     //EFFECT: returns description of experiment as a string. If description is NULL, returns "no description"
     @Override
     public String getDescription() {
-        if (this.description == null) {
+        if (Objects.equals(this.description, "")) {
             return "no description";
         } else {
             return this.description;
@@ -47,4 +52,15 @@ public class GenericDataFile implements NamedFile {
     public void setData(String data) {
         this.data = data;
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", name);
+        jsonObject.put("description", description);
+        jsonObject.put("data", data);
+
+        return jsonObject;
+    }
+
 }

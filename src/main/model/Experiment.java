@@ -2,12 +2,16 @@ package model;
 
 import model.interfaces.Directory;
 import model.interfaces.NamedFile;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 //represents an experiment conducted by a scientist having a name, description, and containing an arbitrary number of
 // data files
-public class Experiment implements NamedFile, Directory {
+public class Experiment implements NamedFile, Directory, Writable {
 
     private String name;                                    //name of Experiment.
     private String description;                             //description of Experiment.
@@ -20,6 +24,7 @@ public class Experiment implements NamedFile, Directory {
     public Experiment(String name) {
         this.name = name;
         this.listOfDataFiles = new LinkedList<>();
+        this.description = "";
     }
 
     @Override
@@ -29,7 +34,7 @@ public class Experiment implements NamedFile, Directory {
 
     //EFFECT: returns description of experiment. If description is NULL, returns "no description"
     public String getDescription() {
-        if (this.description == null) {
+        if (Objects.equals(this.description, "")) {
             return "no description";
         } else {
             return this.description;
@@ -66,4 +71,23 @@ public class Experiment implements NamedFile, Directory {
     }
 
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("description", description);
+        json.put("listOfFiles", dataFilesToJson());
+        return json;
+    }
+
+    // EFFECTS: returns data files in this experiment as a Json array
+    private JSONArray dataFilesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (GenericDataFile d : listOfDataFiles) {
+            jsonArray.put(d.toJson());
+        }
+
+        return jsonArray;
+    }
 }

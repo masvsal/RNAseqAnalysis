@@ -1,14 +1,16 @@
 package model;
 
 import model.interfaces.Directory;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
 import java.util.LinkedList;
 
 //represents a directory of all the Experiments in system.
 
-public class ExperimentDirectory implements Directory {
+public class ExperimentDirectory implements Directory, Writable {
     private LinkedList<Experiment> listofExperiments;          //experiments contained within the experiment directory
-
 
     //EFFECT: instantiates new instance of the Experiment Directory class with an empty list of experiments
     //EFFECT: instantiates a new directory object with an empty list of files
@@ -42,6 +44,25 @@ public class ExperimentDirectory implements Directory {
     @Override
     public void removeFile(Integer position) {
         this.listofExperiments.remove(position - 1);
+    }
+
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("listOfExperiments", experimentsToJson());
+        return json;
+    }
+
+    //EFFECTS: returns experiments in experiment directory as a JSON array
+    private JSONArray experimentsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Experiment e: listofExperiments) {
+            jsonArray.put(e.toJson());
+        }
+
+        return jsonArray;
     }
 
 }

@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class ExperimentDirectoryTest {
     ExperimentDirectory experimentDirectory;
+    JSONObject jsonFile;
 
     @BeforeEach
     public void setup() {
@@ -146,4 +148,9 @@ public class ExperimentDirectoryTest {
 
         assertEquals(2, experimentDirectory.length());
     }
+
+    //test toJson
+    //empty experiment directory
+    //1 experiment
+    //3 experiments
 }

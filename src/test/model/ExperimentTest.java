@@ -206,5 +206,9 @@ public class ExperimentTest {
         assertEquals(2, experiment.length());
     }
 
-    //TODO: test new getfile() method
+    //test toJson
+    //empty experiment, no description
+    //empty experiment, description
+    //1 data file, no description
+    //3 data files, description
 }

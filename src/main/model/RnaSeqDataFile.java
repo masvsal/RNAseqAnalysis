@@ -2,10 +2,13 @@ package model;
 
 
 import model.interfaces.NamedFile;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 
@@ -66,19 +69,77 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     //REQUIRES: threshold > 0, numOfGenes >= 0
     //EFFECT: returns an array list containing n array lists, where n is the given number of genes
     // Each sub-list contains name & fold change of a gene in the RNAseq file with fold change >= to the given threshold
+    //sub-lists are ordered by magnitude of fold change
     // If numOfGenes == -1, include all genes with fold change >= threshold.
     public ArrayList<ArrayList<java.lang.String>> getGeneNamesWithSigChangeExpression(float threshold,
                                                                                       Integer numOfGenes) {
+        ArrayList<ArrayList<java.lang.String>> allSigNameAndFoldChange;
+        ArrayList<ArrayList<java.lang.String>> subSigNameAndFoldChange = new ArrayList<>();
+
+        if (numOfGenes != 0) {
+            allSigNameAndFoldChange = getAllGenesWithSigChangeExpression(threshold);
+            subSigNameAndFoldChange = allSigNameAndFoldChange;
+            if (numOfGenes != -1 && numOfGenes < allSigNameAndFoldChange.size()) {
+                subSigNameAndFoldChange =
+                        new ArrayList<>(allSigNameAndFoldChange.subList(0, numOfGenes));
+            }
+        }
+        subSigNameAndFoldChange = orderFoldChangesLargeToSmall(subSigNameAndFoldChange);
+
+//        try {
+//            Scanner sc = new Scanner(new File(java.lang.String.valueOf(this.path)));
+//            sc.useDelimiter(",");
+//            java.lang.String headerline = sc.nextLine();
+//
+//            while (sc.hasNext() && ((counter < numOfGenes) || (numOfGenes == -1))) {
+//
+//                java.lang.String nextLine = sc.nextLine(); //grabs next line
+//                java.lang.String[] arrayOfLine = nextLine.split(",", 4); //splits line into array
+//                Float foldchange = isThresholdExceeded(arrayOfLine, threshold); //gets fold change if exceeded
+//
+//                if (abs(foldchange) > (float) 1) {
+//                    ArrayList<java.lang.String> newArrayList = new ArrayList<>();
+//                    newArrayList.add(arrayOfLine[0]);
+//
+//                    newArrayList.add(java.lang.String.valueOf(foldchange));
+//                    geneNameAndFoldChange.add(newArrayList);
+//                    counter = counter + 1;
+//                }
+//            }
+//            sc.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        return subSigNameAndFoldChange;
+    }
+
+    //EFFECT: returns ordered list of genes and fold changes, ordered by the magnitude of the fold change
+    private ArrayList<ArrayList<java.lang.String>> orderFoldChangesLargeToSmall(
+            ArrayList<ArrayList<java.lang.String>> list) {
+        ArrayList<ArrayList<java.lang.String>> returnList = (ArrayList<ArrayList<String>>) list.stream()
+                .sorted((g1,g2) -> {
+                    if (abs(Double.parseDouble(g1.get(1))) > abs(Double.parseDouble(g2.get(1)))) {
+                        return -1;
+                    } else if ((abs(Double.parseDouble(g1.get(1))) == abs(Double.parseDouble(g2.get(1))))) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                }).collect(Collectors.toList());
+        return returnList;
+    }
+
+    //EFFECT: returns all the genes in csv RNAseq file referenced by file that have foldchange >= given threshold
+    private ArrayList<ArrayList<java.lang.String>> getAllGenesWithSigChangeExpression(float threshold) {
 
         ArrayList<ArrayList<java.lang.String>> geneNameAndFoldChange = new ArrayList<>();
-        int counter = 0;
+
         try {
             Scanner sc = new Scanner(new File(java.lang.String.valueOf(this.path)));
             sc.useDelimiter(",");
             java.lang.String headerline = sc.nextLine();
 
-            while (sc.hasNext() && ((counter < numOfGenes) || (numOfGenes == -1))) {
-
+            while (sc.hasNext()) {
                 java.lang.String nextLine = sc.nextLine(); //grabs next line
                 java.lang.String[] arrayOfLine = nextLine.split(",", 4); //splits line into array
                 Float foldchange = isThresholdExceeded(arrayOfLine, threshold); //gets fold change if exceeded
@@ -89,13 +150,14 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
 
                     newArrayList.add(java.lang.String.valueOf(foldchange));
                     geneNameAndFoldChange.add(newArrayList);
-                    counter = counter + 1;
                 }
             }
             sc.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
         return geneNameAndFoldChange;
     }
 
@@ -117,7 +179,8 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
             return (float) 0;
         }
     }
-    //calculate the fold change between two given float values
+
+    //EFFECT: calculate the fold change between two given float values
     //fold change = (challenge condition copy number)/(wild type copy number).
     // If less than 1: negative reciprocal of fold change
 
@@ -127,6 +190,21 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
             foldChange = -1 * (1 / foldChange);
         }
         return foldChange;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("name", super.getName());
+        jsonObject.put("description", super.getDescription());
+        jsonObject.put("data", super.getData());
+
+        jsonObject.put("path", path);
+
+        return jsonObject;
+
+
     }
 
 }

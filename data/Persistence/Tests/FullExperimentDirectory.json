@@ -1,0 +1,37 @@
+{"listOfExperiments": [
+    {
+        "listOfFiles": [{
+            "data": "td",
+            "name": "f1",
+            "description": ""
+        }],
+        "name": "ex1",
+        "description": ""
+    },
+    {
+        "listOfFiles": [{
+            "data": "td",
+            "name": "f2",
+            "description": ""
+        }],
+        "name": "ex2",
+        "description": ""
+    },
+    {
+        "listOfFiles": [
+            {
+                "data": "td",
+                "name": "f3",
+                "description": ""
+            },
+            {
+                "path": "data/RNAseqDataFileTests/5Down5Up.csv",
+                "data": "td",
+                "name": "f4",
+                "description": "no description"
+            }
+        ],
+        "name": "ex3",
+        "description": ""
+    }
+]}

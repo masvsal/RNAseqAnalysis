@@ -1,0 +1,45 @@
+{"listOfExperiments": [
+    {
+        "listOfFiles": [
+            {
+                "data": "sample survival rate = 100%",
+                "name": "trial 1, Temp = 70 F",
+                "description": ""
+            },
+            {
+                "data": "sample survival rate = 10%",
+                "name": "trial 2, Temp = 100 F",
+                "description": ""
+            }
+        ],
+        "name": "Effect of Temperature on E. Coli",
+        "description": ""
+    },
+    {
+        "listOfFiles": [
+            {
+                "path": "data/RNAseqExampleFiles/Nac_RNASeq _ NoFC_v2.csv",
+                "data": "# of significant changes @ threshold: 100 = 31",
+                "name": "TF = NaC",
+                "description": "sam"
+            },
+            {
+                "path": "data/RNAseqExampleFiles/CsiR_RNAseq_NoFC_v2.csv",
+                "data": "Analysis not run yet",
+                "name": "TF = CsiR",
+                "description": "no description"
+            }
+        ],
+        "name": "RNAseq",
+        "description": "sam"
+    },
+    {
+        "listOfFiles": [{
+            "data": "sam",
+            "name": "sam",
+            "description": "sam"
+        }],
+        "name": "sam",
+        "description": "sam"
+    }
+]}

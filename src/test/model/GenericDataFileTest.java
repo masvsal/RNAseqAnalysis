@@ -80,4 +80,8 @@ public class GenericDataFileTest {
         String data = datafile.getData();
         assertEquals("new data", data);
     }
+
+    //toJson test
+    //empty description
+    //description
 }
