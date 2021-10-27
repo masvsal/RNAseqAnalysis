@@ -57,7 +57,8 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
             while (sc.hasNext()) {
                 java.lang.String nextLine = sc.nextLine(); //grabs next line
                 java.lang.String[] arrayOfLine = nextLine.split(",", 4);
-                if (abs(isThresholdExceeded(arrayOfLine, threshold)) > 0) {
+                Float foldChange = lowCountFilter(arrayOfLine, threshold);
+                if (abs(foldChange) > 0) {
                     counter = counter + 1;
                 }
             }
@@ -148,12 +149,12 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     }
 
     //
-    //EFFECTS: corrects bias in a given gene based on gene length
-    private String[] biasCorrectorI(String[] arrayOfLine) {
-        String[] correctedArray = new String[0];
-
-        return correctedArray;
-    }
+//    //EFFECTS: corrects bias in a given gene based on gene length
+//    private String[] biasCorrectorI(String[] arrayOfLine) {
+//        String[] correctedArray = new String[0];
+//
+//        return correctedArray;
+//    }
 
     //effect: returns result of wald test on given gene for some WT and Challenge condtn expression
     //TODO: make filter out non-sigificant differences between WT and Challenge
@@ -167,19 +168,20 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
         return foldChange;
     }
 
-    //effect: returns result of wald test on given gene for some WT and Challenge condtn expression
-    private Float waldTestFilter(String[] arrayOfLine, Float threshold) {
-        float z1;
-        float chalCondtnCopyNum = Float.parseFloat(arrayOfLine[2]);
-        float wildTypeCopyNum = Float.parseFloat(arrayOfLine[3]);
-        float denominator = (float) sqrt(chalCondtnCopyNum + wildTypeCopyNum * (Q * Q));
-        float numerator = chalCondtnCopyNum - wildTypeCopyNum * Q;
-        z1 = numerator / denominator;
-        return z1;
-    }
+//    //effect: returns result of wald test on given gene for some WT and Challenge condtn expression
+//    private Float waldTestFilter(String[] arrayOfLine, Float threshold) {
+//        float z1;
+//        float chalCondtnCopyNum = Float.parseFloat(arrayOfLine[2]);
+//        float wildTypeCopyNum = Float.parseFloat(arrayOfLine[3]);
+//        float denominator = (float) sqrt(chalCondtnCopyNum + wildTypeCopyNum * (Q * Q));
+//        float numerator = chalCondtnCopyNum - wildTypeCopyNum * Q;
+//        z1 = numerator / denominator;
+//        return z1;
+//    }
 
     //EFFECT: If fold change of given row >= threshold, return fold change. Else, return 0.
     private Float isThresholdExceeded(java.lang.String[] arrayOfLine, Float threshold) {
+
         float chalCondtnCopyNum = Float.parseFloat(arrayOfLine[2]);
         float wildTypeCopyNum = Float.parseFloat(arrayOfLine[3]);
         if (chalCondtnCopyNum == 0) {
