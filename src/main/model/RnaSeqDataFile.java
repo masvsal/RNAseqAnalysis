@@ -11,11 +11,13 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 
 //a subtype of the datafile class. Stores a reference to, and interacts with, RNAseq output file.
 
 public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     private java.lang.String path;          //relative path to RNAseq output file (.csv)
+    static float Q = (float) 1;             //ratio of WT to Challenge Condition in RNAseq data
 
 
     //REQUIRES: relative path from content root->file pointing .csv file with the following format:
@@ -77,39 +79,18 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
         ArrayList<ArrayList<java.lang.String>> subSigNameAndFoldChange = new ArrayList<>();
 
         if (numOfGenes != 0) {
+
             allSigNameAndFoldChange = getAllGenesWithSigChangeExpression(threshold);
             subSigNameAndFoldChange = allSigNameAndFoldChange;
+
             if (numOfGenes != -1 && numOfGenes < allSigNameAndFoldChange.size()) {
                 subSigNameAndFoldChange =
                         new ArrayList<>(allSigNameAndFoldChange.subList(0, numOfGenes));
             }
         }
+
         subSigNameAndFoldChange = orderFoldChangesLargeToSmall(subSigNameAndFoldChange);
 
-//        try {
-//            Scanner sc = new Scanner(new File(java.lang.String.valueOf(this.path)));
-//            sc.useDelimiter(",");
-//            java.lang.String headerline = sc.nextLine();
-//
-//            while (sc.hasNext() && ((counter < numOfGenes) || (numOfGenes == -1))) {
-//
-//                java.lang.String nextLine = sc.nextLine(); //grabs next line
-//                java.lang.String[] arrayOfLine = nextLine.split(",", 4); //splits line into array
-//                Float foldchange = isThresholdExceeded(arrayOfLine, threshold); //gets fold change if exceeded
-//
-//                if (abs(foldchange) > (float) 1) {
-//                    ArrayList<java.lang.String> newArrayList = new ArrayList<>();
-//                    newArrayList.add(arrayOfLine[0]);
-//
-//                    newArrayList.add(java.lang.String.valueOf(foldchange));
-//                    geneNameAndFoldChange.add(newArrayList);
-//                    counter = counter + 1;
-//                }
-//            }
-//            sc.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
         return subSigNameAndFoldChange;
     }
 
@@ -142,13 +123,18 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
             while (sc.hasNext()) {
                 java.lang.String nextLine = sc.nextLine(); //grabs next line
                 java.lang.String[] arrayOfLine = nextLine.split(",", 4); //splits line into array
-                Float foldchange = isThresholdExceeded(arrayOfLine, threshold); //gets fold change if exceeded
+                Float foldChange;
 
-                if (abs(foldchange) > (float) 1) {
+                //bias correction:
+
+                //low count filtering:
+                foldChange = lowCountFilter(arrayOfLine, threshold);
+
+                if (abs(foldChange) > (float) 1) {
                     ArrayList<java.lang.String> newArrayList = new ArrayList<>();
                     newArrayList.add(arrayOfLine[0]);
 
-                    newArrayList.add(java.lang.String.valueOf(foldchange));
+                    newArrayList.add(java.lang.String.valueOf(foldChange));
                     geneNameAndFoldChange.add(newArrayList);
                 }
             }
@@ -161,6 +147,36 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
         return geneNameAndFoldChange;
     }
 
+    //
+    //EFFECTS: corrects bias in a given gene based on gene length
+    private String[] biasCorrectorI(String[] arrayOfLine) {
+        String[] correctedArray = new String[0];
+
+        return correctedArray;
+    }
+
+    //effect: returns result of wald test on given gene for some WT and Challenge condtn expression
+    //TODO: make filter out non-sigificant differences between WT and Challenge
+    private Float lowCountFilter(String[] arrayOfLine, Float threshold) {
+        Float foldChange;
+        if (Double.parseDouble(arrayOfLine[2]) <= 0.5 && Double.parseDouble(arrayOfLine[3]) <= 0.5) {
+            foldChange = (float) 0;
+        } else {
+            foldChange = isThresholdExceeded(arrayOfLine, threshold); //gets fold change if exceeded
+        }
+        return foldChange;
+    }
+
+    //effect: returns result of wald test on given gene for some WT and Challenge condtn expression
+    private Float waldTestFilter(String[] arrayOfLine, Float threshold) {
+        float z1;
+        float chalCondtnCopyNum = Float.parseFloat(arrayOfLine[2]);
+        float wildTypeCopyNum = Float.parseFloat(arrayOfLine[3]);
+        float denominator = (float) sqrt(chalCondtnCopyNum + wildTypeCopyNum * (Q * Q));
+        float numerator = chalCondtnCopyNum - wildTypeCopyNum * Q;
+        z1 = numerator / denominator;
+        return z1;
+    }
 
     //EFFECT: If fold change of given row >= threshold, return fold change. Else, return 0.
     private Float isThresholdExceeded(java.lang.String[] arrayOfLine, Float threshold) {
