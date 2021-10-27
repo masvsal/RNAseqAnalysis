@@ -2,6 +2,7 @@ package persistence;
 
 
 //import com.oracle.javafx.jmx.json.JSONReader;
+
 import model.Experiment;
 import model.ExperimentDirectory;
 import model.GenericDataFile;
@@ -30,9 +31,9 @@ public class JsonReader {
     //EFFECT: reads Experiment directory from Json file and returns it.
     //throw IO exception if error ocurs during reading file
     public ExperimentDirectory read() throws IOException {
-       String jsonData = readFile(source);
-       JSONObject jsonObject = new JSONObject(jsonData);
-       return parseExperimentDirectory(jsonObject);
+        String jsonData = readFile(source);
+        JSONObject jsonObject = new JSONObject(jsonData);
+        return parseExperimentDirectory(jsonObject);
     }
 
     //EFFECT: returns source json file as string and returns it

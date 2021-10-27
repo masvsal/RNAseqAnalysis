@@ -48,12 +48,7 @@ public class DirectoryApp {
         String command;
 
         while (keepGoing) {
-            System.out.println("Welcome to the file explorer! :) \n");
-            System.out.println("*A* = add Experiment");
-            System.out.println("*R* = remove Experiment");
-            System.out.println("*S* = save file");
-            System.out.println("*Q* = quit");
-            printRange(experimentDirectory);
+            printExperimentDirectoryMenu();
             displayExperiments();
             command = myObj.nextLine();
             command = command.toLowerCase();
@@ -70,6 +65,16 @@ public class DirectoryApp {
         }
 
         System.out.println("\nGoodbye!");
+    }
+
+    //EFFECTS: prints options while in the experiment directory
+    private void printExperimentDirectoryMenu() {
+        System.out.println("Welcome to the file explorer! :) \n");
+        System.out.println("*A* = add Experiment");
+        System.out.println("*R* = remove Experiment");
+        System.out.println("*S* = save file");
+        System.out.println("*Q* = quit");
+        printRange(experimentDirectory);
     }
 
     //MODIFIES: this
