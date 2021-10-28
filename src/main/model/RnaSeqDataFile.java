@@ -16,8 +16,11 @@ import static java.lang.Math.sqrt;
 //a subtype of the datafile class. Stores a reference to, and interacts with, RNAseq output file.
 
 public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
+    private static double LOW_COUNT_THRESHOLD = 0.5;
+
     private java.lang.String path;          //relative path to RNAseq output file (.csv)
     static float Q = (float) 1;             //ratio of WT to Challenge Condition in RNAseq data
+
 
 
     //REQUIRES: relative path from content root->file pointing .csv file with the following format:
@@ -50,22 +53,8 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     //EFFECT: returns the number of genes in the given file that contain a fold change >= than the given threshold.
     public Integer countSigChangeExpression(float threshold) {
         int counter = 0;
-        try {
-            Scanner sc = new Scanner(new File(java.lang.String.valueOf(this.path)));
-            sc.useDelimiter(",");
-            java.lang.String headerline = sc.nextLine();
-            while (sc.hasNext()) {
-                java.lang.String nextLine = sc.nextLine(); //grabs next line
-                java.lang.String[] arrayOfLine = nextLine.split(",", 4);
-                Float foldChange = lowCountFilter(arrayOfLine, threshold);
-                if (abs(foldChange) > 0) {
-                    counter = counter + 1;
-                }
-            }
-            sc.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        ArrayList<ArrayList<String>> output = getAllGenesWithSigChangeExpression(threshold);
+        counter = output.size();
         return counter;
     }
 
@@ -74,6 +63,7 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     // Each sub-list contains name & fold change of a gene in the RNAseq file with fold change >= to the given threshold
     //sub-lists are ordered by magnitude of fold change
     // If numOfGenes == -1, include all genes with fold change >= threshold.
+    //genes are low-count filtered before their fold change is evaluated
     public ArrayList<ArrayList<java.lang.String>> getGeneNamesWithSigChangeExpression(float threshold,
                                                                                       Integer numOfGenes) {
         ArrayList<ArrayList<java.lang.String>> allSigNameAndFoldChange;
@@ -112,6 +102,7 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     }
 
     //EFFECT: returns all the genes in csv RNAseq file referenced by file that have foldchange >= given threshold
+    //genes are low-count filtered before their fold change is evaluated
     private ArrayList<ArrayList<java.lang.String>> getAllGenesWithSigChangeExpression(float threshold) {
 
         ArrayList<ArrayList<java.lang.String>> geneNameAndFoldChange = new ArrayList<>();
@@ -156,11 +147,11 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
 //        return correctedArray;
 //    }
 
-    //effect: returns result of wald test on given gene for some WT and Challenge condtn expression
-    //TODO: make filter out non-sigificant differences between WT and Challenge
+    //effect: return 0 if the WT and Challenge expression of a given gene is under LOW_COUNT_THRESHOLD
     private Float lowCountFilter(String[] arrayOfLine, Float threshold) {
         Float foldChange;
-        if (Double.parseDouble(arrayOfLine[2]) <= 0.5 && Double.parseDouble(arrayOfLine[3]) <= 0.5) {
+        if (Double.parseDouble(arrayOfLine[2]) <= LOW_COUNT_THRESHOLD
+                && Double.parseDouble(arrayOfLine[3]) <= LOW_COUNT_THRESHOLD) {
             foldChange = (float) 0;
         } else {
             foldChange = isThresholdExceeded(arrayOfLine, threshold); //gets fold change if exceeded
