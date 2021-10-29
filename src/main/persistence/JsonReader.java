@@ -43,6 +43,7 @@ public class JsonReader {
 
         try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
             stream.forEach(contentBuilder::append);
+
         }
 
         return contentBuilder.toString();

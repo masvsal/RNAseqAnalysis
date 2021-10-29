@@ -14,10 +14,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 //file directory application
 public class DirectoryApp {
+
+    private static int BOOTUP_TIME = 750;
     private ExperimentDirectory experimentDirectory;
+
 
 
     //EFFECTS: runs the file directory application
@@ -30,14 +34,41 @@ public class DirectoryApp {
     //EFFECT: gives the user the option to reload saved directory, if not: initializes default files
     private void setup() {
         Scanner myObj = new Scanner(System.in);
-        System.out.println("BOOTING UP...");
+
+
         System.out.println("Would you like to reload saved experiment directory? \n Y/N");
         String command = myObj.nextLine();
+
+        bootupSequence();
+
         if (command.equals("y")) {
             reload();
         } else {
             init();
         }
+    }
+
+    //EFFECTS: displays bootup display
+    private void bootupSequence() {
+        System.out.println("BOOTING UP...");
+        try {
+            Thread.sleep(BOOTUP_TIME);
+        } catch (InterruptedException e) {
+            System.out.println("Bootup Interrupted");
+        }
+        System.out.println("...");
+        try {
+            Thread.sleep(BOOTUP_TIME);
+        } catch (InterruptedException e) {
+            System.out.println("Bootup Interrupted");
+        }
+        System.out.println("...");
+        try {
+            Thread.sleep(BOOTUP_TIME);
+        } catch (InterruptedException e) {
+            System.out.println("Bootup Interrupted");
+        }
+
     }
 
     //MODIFIES: this

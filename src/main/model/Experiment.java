@@ -80,7 +80,7 @@ public class Experiment implements NamedFile, Directory, Writable {
         return json;
     }
 
-    // EFFECTS: returns data files in this experiment as a Json array
+    // EFFECTS: returns data files assigned to this experiment as a Json array
     private JSONArray dataFilesToJson() {
         JSONArray jsonArray = new JSONArray();
 

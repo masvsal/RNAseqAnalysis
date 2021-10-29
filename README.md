@@ -19,9 +19,13 @@ I would like to work in bioinformatics so I want to understand the basic workflo
 
 ####User Stories - Phase 2
 
-- As a user, I want to be able to assign an experiment directory to a username and save it to file
-- As a user, I want to be able to reload the experiment directory assigned to my username from file
+- As a user, I want to be able to save my current experiment directory to file.
+- As a user, I want to have the option to load a saved experiment directory from file when I start my application.
 
+
+### Citations:
+- code in persistence package modelled off of CPSC210 JSONSerializationDemo:
+https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 
 ####TODO (For Personal Use)
 

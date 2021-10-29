@@ -16,10 +16,10 @@ import static java.lang.Math.sqrt;
 //a subtype of the datafile class. Stores a reference to, and interacts with, RNAseq output file.
 
 public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
-    private static double LOW_COUNT_THRESHOLD = 0.5;
-
-    private java.lang.String path;          //relative path to RNAseq output file (.csv)
-    static float Q = (float) 1;             //ratio of WT to Challenge Condition in RNAseq data
+    private static double LOW_COUNT_THRESHOLD = 0.5; //Lowest possible level of expression to be considered for
+                                                    // diff gene expression analysis.
+    private String path;                            //Relative path to RNAseq output file (.csv).
+    static float Q = (float) 1;                     //Ratio of WT to Challenge Condition in RNAseq data.
 
 
 
@@ -28,7 +28,7 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     // Column 1: symbol (String), Column 2: Operon (String), column 3: Challenge Condition RNA copy # (Float)
     // column 4: WT RNA copy # (Float))
     //EFFECT: instantiates a new instance of RNAseqDataFile
-    public RnaSeqDataFile(java.lang.String name, java.lang.String data, java.lang.String path) {
+    public RnaSeqDataFile(String name, String data, String path) {
         super(name, data);
         this.path = path;
     }
@@ -40,34 +40,34 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     }
 
     //EFFECT: sets path of given file
-    public void setPath(java.lang.String path) {
+    public void setPath(String path) {
         this.path = path;
     }
 
  /*   IGNORE:
     //MODIFIES: .csv file referenced in this object's path field
     //EFFECT: adds a row to .csv file using given gene name, operon, WT copy number, and Challenge copy number
-    public void newRow(String name, String operon, Float wildTypeCopyNumber, Float challengeCopyNumber) {}*/
+    public void newRow(String name, String operon, Float wildTypeCopyNumber, Float challengeCopyNumber) {}
+    */
 
     //REQUIRES: threshold > 0
-    //EFFECT: returns the number of genes in the given file that contain a fold change >= than the given threshold.
+    //EFFECT: returns number of genes in .csv file that contain a fold change >= than given threshold level
+    //genes are low-count filtered before their fold change is evaluated
     public Integer countSigChangeExpression(float threshold) {
-        int counter = 0;
         ArrayList<ArrayList<String>> output = getAllGenesWithSigChangeExpression(threshold);
-        counter = output.size();
-        return counter;
+        return output.size();
     }
 
     //REQUIRES: threshold > 0, numOfGenes >= 0
-    //EFFECT: returns an array list containing n array lists, where n is the given number of genes
+    //EFFECT: returns an array list of n array lists, where n is the number of genes in .csv file
     // Each sub-list contains name & fold change of a gene in the RNAseq file with fold change >= to the given threshold
     //sub-lists are ordered by magnitude of fold change
     // If numOfGenes == -1, include all genes with fold change >= threshold.
     //genes are low-count filtered before their fold change is evaluated
-    public ArrayList<ArrayList<java.lang.String>> getGeneNamesWithSigChangeExpression(float threshold,
+    public ArrayList<ArrayList<String>> getGeneNamesWithSigChangeExpression(float threshold,
                                                                                       Integer numOfGenes) {
-        ArrayList<ArrayList<java.lang.String>> allSigNameAndFoldChange;
-        ArrayList<ArrayList<java.lang.String>> subSigNameAndFoldChange = new ArrayList<>();
+        ArrayList<ArrayList<String>> allSigNameAndFoldChange;
+        ArrayList<ArrayList<String>> subSigNameAndFoldChange = new ArrayList<>();
 
         if (numOfGenes != 0) {
 
@@ -86,35 +86,28 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     }
 
     //EFFECT: returns ordered list of genes and fold changes, ordered by the magnitude of the fold change
-    private ArrayList<ArrayList<java.lang.String>> orderFoldChangesLargeToSmall(
-            ArrayList<ArrayList<java.lang.String>> list) {
-        ArrayList<ArrayList<java.lang.String>> returnList = (ArrayList<ArrayList<String>>) list.stream()
-                .sorted((g1,g2) -> {
-                    if (abs(Double.parseDouble(g1.get(1))) > abs(Double.parseDouble(g2.get(1)))) {
-                        return -1;
-                    } else if ((abs(Double.parseDouble(g1.get(1))) == abs(Double.parseDouble(g2.get(1))))) {
-                        return 0;
-                    } else {
-                        return 1;
-                    }
-                }).collect(Collectors.toList());
+    private ArrayList<ArrayList<String>> orderFoldChangesLargeToSmall(
+            ArrayList<ArrayList<String>> list) {
+        ArrayList<ArrayList<String>> returnList = (ArrayList<ArrayList<String>>) list.stream()
+                .sorted((g1,g2) -> Double.compare(abs(Double.parseDouble(g2.get(1))),
+                        abs(Double.parseDouble(g1.get(1))))).collect(Collectors.toList());
         return returnList;
     }
 
     //EFFECT: returns all the genes in csv RNAseq file referenced by file that have foldchange >= given threshold
     //genes are low-count filtered before their fold change is evaluated
-    private ArrayList<ArrayList<java.lang.String>> getAllGenesWithSigChangeExpression(float threshold) {
+    private ArrayList<ArrayList<String>> getAllGenesWithSigChangeExpression(float threshold) {
 
-        ArrayList<ArrayList<java.lang.String>> geneNameAndFoldChange = new ArrayList<>();
+        ArrayList<ArrayList<String>> geneNameAndFoldChange = new ArrayList<>();
 
         try {
-            Scanner sc = new Scanner(new File(java.lang.String.valueOf(this.path)));
+            Scanner sc = new Scanner(new File(String.valueOf(this.path)));
             sc.useDelimiter(",");
-            java.lang.String headerline = sc.nextLine();
+            String headerline = sc.nextLine();
 
             while (sc.hasNext()) {
-                java.lang.String nextLine = sc.nextLine(); //grabs next line
-                java.lang.String[] arrayOfLine = nextLine.split(",", 4); //splits line into array
+                String nextLine = sc.nextLine(); //grabs next line
+                String[] arrayOfLine = nextLine.split(",", 4); //splits line into array
                 Float foldChange;
 
                 //bias correction:
@@ -123,10 +116,10 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
                 foldChange = lowCountFilter(arrayOfLine, threshold);
 
                 if (abs(foldChange) > (float) 1) {
-                    ArrayList<java.lang.String> newArrayList = new ArrayList<>();
+                    ArrayList<String> newArrayList = new ArrayList<>();
                     newArrayList.add(arrayOfLine[0]);
 
-                    newArrayList.add(java.lang.String.valueOf(foldChange));
+                    newArrayList.add(String.valueOf(foldChange));
                     geneNameAndFoldChange.add(newArrayList);
                 }
             }
@@ -150,6 +143,7 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     //effect: return 0 if the WT and Challenge expression of a given gene is under LOW_COUNT_THRESHOLD
     private Float lowCountFilter(String[] arrayOfLine, Float threshold) {
         Float foldChange;
+
         if (Double.parseDouble(arrayOfLine[2]) <= LOW_COUNT_THRESHOLD
                 && Double.parseDouble(arrayOfLine[3]) <= LOW_COUNT_THRESHOLD) {
             foldChange = (float) 0;
@@ -171,7 +165,7 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
 //    }
 
     //EFFECT: If fold change of given row >= threshold, return fold change. Else, return 0.
-    private Float isThresholdExceeded(java.lang.String[] arrayOfLine, Float threshold) {
+    private Float isThresholdExceeded(String[] arrayOfLine, Float threshold) {
 
         float chalCondtnCopyNum = Float.parseFloat(arrayOfLine[2]);
         float wildTypeCopyNum = Float.parseFloat(arrayOfLine[3]);
