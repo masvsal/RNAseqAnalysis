@@ -429,8 +429,8 @@ public class DirectoryApp {
         runQuitMenu();
     }
 
-    //EFFECT: displays menu that only quits when "q" inputted
 
+    //EFFECT: saves experiment directory to file
     private void saveFile() {
         try {
             JsonWriter writer = new JsonWriter("data/Persistence/ExperimentDirectory.json");
