@@ -8,26 +8,39 @@ import model.interfaces.Directory;
 import model.interfaces.NamedFile;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+import ui.menus.ExperimentDirectoryMenu;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 //file directory application
 public class DirectoryApp {
 
     private static int BOOTUP_TIME = 750;
+
+
+
     private ExperimentDirectory experimentDirectory;
 
-
+    public ExperimentDirectory getExperimentDirectory() {
+        return experimentDirectory;
+    }
 
     //EFFECTS: runs the file directory application
     public DirectoryApp() {
-        setup();
-        runExperimentDirectory();
+        //setup();
+        //init();
+        //runExperimentDirectory();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new BootUpInterface(experimentDirectory);
+            }
+        });
     }
 
     //MODIFIES: this
@@ -35,11 +48,10 @@ public class DirectoryApp {
     private void setup() {
         Scanner myObj = new Scanner(System.in);
 
-
         System.out.println("Would you like to reload saved experiment directory? \n Y/N");
         String command = myObj.nextLine();
 
-        bootupSequence();
+        //bootupSequence();
 
         if (command.equals("y")) {
             reload();
@@ -74,28 +86,34 @@ public class DirectoryApp {
     //MODIFIES: this
     //EFFECTS: displays experiment directory menu and processes user input
     private void runExperimentDirectory() {
-        boolean keepGoing = true;
-        Scanner myObj = new Scanner(System.in);
-        String command;
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                new ExperimentDirectoryMenu(experimentDirectory);
+//            }
+//        });
+//        boolean keepGoing = true;
+//        Scanner myObj = new Scanner(System.in);
+//        String command;
+//
+//        while (keepGoing) {
+//            printExperimentDirectoryMenu();
+//            displayExperiments();
+//            command = myObj.nextLine();
+//            command = command.toLowerCase();
+//
+//            if (command.equals("q")) {
+//                keepGoing = false;
+//            } else if (command.equals("a")) {
+//                addExperiment();
+//            } else if (command.equals("r")) {
+//                removeFile(experimentDirectory);
+//            } else {
+//                processExperimentDirectoryCommand(command);
+//            }
+//        }
 
-        while (keepGoing) {
-            printExperimentDirectoryMenu();
-            displayExperiments();
-            command = myObj.nextLine();
-            command = command.toLowerCase();
-
-            if (command.equals("q")) {
-                keepGoing = false;
-            } else if (command.equals("a")) {
-                addExperiment();
-            } else if (command.equals("r")) {
-                removeFile(experimentDirectory);
-            } else {
-                processExperimentDirectoryCommand(command);
-            }
-        }
-
-        System.out.println("\nGoodbye!");
+        //System.out.println("\nGoodbye!");
     }
 
     //EFFECTS: prints options while in the experiment directory
@@ -252,7 +270,7 @@ public class DirectoryApp {
     //MODIFIES: this
     //EFFECTS: initializes experiment directory, 2 experiments, and 4 data files.
     //places 2 data files in each experiment. Places experiments in experiment directory
-    private void init() {
+    public void init() {
         experimentDirectory = new ExperimentDirectory();
 
         Experiment experiment1 = new Experiment("Effect of pH on E. Coli");
@@ -445,7 +463,7 @@ public class DirectoryApp {
     }
 
     //EFFECT: loads experiment directory from file
-    private void reload() {
+    public void reload() {
         JsonReader reader = new JsonReader("data/Persistence/ExperimentDirectory.json");
         try {
             experimentDirectory = reader.read();

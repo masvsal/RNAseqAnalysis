@@ -1,6 +1,7 @@
 package model;
 
 import model.interfaces.Directory;
+import model.interfaces.NamedFile;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -16,6 +17,12 @@ public class ExperimentDirectory implements Directory, Writable {
     //EFFECT: instantiates a new directory object with an empty list of files
     public ExperimentDirectory() {
         this.listofExperiments = new LinkedList<>();
+    }
+
+
+    //EFFECTS: returns list field
+    public LinkedList<Experiment> getListofExperiments() {
+        return listofExperiments;
     }
 
     //MODIFIES: this

@@ -1,5 +1,7 @@
 package model.interfaces;
 
+import java.util.LinkedList;
+
 //represents a generic directory having a list of named files.
 public interface Directory { //if this is never being instantiated, do I make it abstract?
 
@@ -14,3 +16,5 @@ public interface Directory { //if this is never being instantiated, do I make it
     //EFFECT: removes the data file matching the given position from the directory's list of files, index begins at 1
     void removeFile(Integer position);
 }
+
+

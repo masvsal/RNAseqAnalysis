@@ -41,6 +41,12 @@ public class Experiment implements NamedFile, Directory, Writable {
         }
     }
 
+    //EFFECT: return data file list
+
+    public LinkedList<GenericDataFile> getListOfDataFiles() {
+        return listOfDataFiles;
+    }
+
     @Override
     public void setDescription(String description) {
         this.description = description;
@@ -90,4 +96,5 @@ public class Experiment implements NamedFile, Directory, Writable {
 
         return jsonArray;
     }
+
 }

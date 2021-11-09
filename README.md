@@ -40,5 +40,6 @@ the experiment is gone. (FIXED, removed extra initialization)
 - assign marker gene that can be used for marker comparison
 - search for above threshold
 - google fpKm
+- use swing file chooser to add ability to add new csv files
 
 
