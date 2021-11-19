@@ -1,6 +1,7 @@
 package ui.display;
 
 import model.RnaSeqDataFile;
+import ui.MainInterface;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -15,6 +16,7 @@ public class RNAseqOverviewDisplay extends JPanel implements ActionListener {
     private RnaSeqDataFile dataFile;
     private DataFileDisplay parent;
     private JPanel statsOverview;
+    private float standardDev;
     private JTextField textField;
     private JScrollPane scrollPane;
     private Float threshold;
@@ -42,7 +44,8 @@ public class RNAseqOverviewDisplay extends JPanel implements ActionListener {
     }
 
     private void showTopGene() {
-        ArrayList<ArrayList<String>> output = dataFile.getGeneNamesWithSigChangeExpression(0, 100);
+        ArrayList<ArrayList<String>> output =
+                dataFile.getGeneNamesWithSigChangeExpression(0, 100, true);
         String[][] array = create2DArray(output);
         createGeneTable(array);
     }
@@ -76,7 +79,7 @@ public class RNAseqOverviewDisplay extends JPanel implements ActionListener {
         statsOverview.setBackground(Color.LIGHT_GRAY);
         statsOverview.setLayout(new FlowLayout());
         float mean = dataFile.getMean();
-        float standardDev = dataFile.getStandardDeviation();
+        standardDev = dataFile.getStandardDeviation();
 
         JLabel meanLabel = new JLabel("Mean: " + mean);
         JLabel standardDevLabel = new JLabel("Standard Dev: " + standardDev);
@@ -116,7 +119,8 @@ public class RNAseqOverviewDisplay extends JPanel implements ActionListener {
 
     //Executes search for top genes
     private void showDiffGeneExpression(float threshold, int numGenes) {
-        ArrayList<ArrayList<String>> geneList = dataFile.getGeneNamesWithSigChangeExpression(threshold, numGenes);
+        ArrayList<ArrayList<String>> geneList =
+                dataFile.getGeneNamesWithSigChangeExpression(threshold, numGenes, true);
         String[][] geneArray = create2DArray(geneList);
         System.out.println(geneList);
         createGeneTable(geneArray);
@@ -145,5 +149,15 @@ public class RNAseqOverviewDisplay extends JPanel implements ActionListener {
         } catch (NumberFormatException err) {
             textField.setText("bad input. Please try again:");
         }
+    }
+
+    //visualizes given RNAseq file by creating graph object
+    public void createGraph() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new Graph(dataFile, standardDev);
+            }
+        });
     }
 }

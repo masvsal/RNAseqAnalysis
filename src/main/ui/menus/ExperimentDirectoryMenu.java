@@ -15,12 +15,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+//menu containing all experiments in experiment directory
 public class ExperimentDirectoryMenu extends Menu implements ListSelectionListener, ActionListener {
-    private ExperimentDirectory experimentDirectory;
-    private DataFileDirectoryMenu dataFileDirectoryMenu;
+
+    private ExperimentDirectory experimentDirectory;        //reference to main data structure
+    private DataFileDirectoryMenu dataFileDirectoryMenu;    //reference to menu component that depends on currently
+                                                            //selected item
 
 
-
+    //MODIFiES: this
+    //EFFECTS:instantiates new Experiment Directory menu object. Adds panels and scrollpane.
     public ExperimentDirectoryMenu(DataFileDirectoryMenu dataFileDirectoryMenu, MainInterface mainInterface) {
         super(mainInterface);
         new JPanel();
@@ -50,6 +54,9 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
     }
 
     @Override
+    //modifies: this, datafileDirectoryMeny
+    //effects: changes state of menu to reflect currently selected item. If item is selected, creates new menu for it,
+    //sets selection label to its name and sets this list to active list in toolbar
     public void valueChanged(ListSelectionEvent e) {
         idx = itemList.getSelectedIndex();
         if (idx != -1) {
@@ -78,7 +85,7 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
     @Override
     //Modifies: MainInterFace, this
     //Effect: creates a text field below list prompting user to input name of a new experiment
-    public void addItemName() {
+    public void addItem() {
         createTextField("name");
         textField.setActionCommand("0");
     }
@@ -96,13 +103,16 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
     }
 
 
+    //modifies: this
+    //handles all text field input. If 'add' text field, creates new item and shows it. If 'description' text field,
+    //modifies current item's description. Handles un-predictable user input.
     public void actionPerformed(ActionEvent e) {
         try {
             if (e.getActionCommand().equals("0")) {
                 addName();
                 mainInterface.validate();
             } else if (e.getActionCommand().equals("2")) {
-                addDescription(experimentDirectory);
+                saveAndShowDescription(experimentDirectory);
                 dataFileDirectoryMenu.refreshDisplay();
             }
         } catch (IndexOutOfBoundsException err) {
@@ -110,6 +120,8 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
         }
     }
 
+    //modifies: this
+    //effects: creates new experiment containing a null file. Shows experiment in menu.
     private void addName() {
         String name = textField.getText();
         String newName = name.split(":")[1];
@@ -128,7 +140,7 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
         mainInterface.pack();
     }
 
-
+    //effects: adds new scrollpane that reflects current state of data in experiment directory.
     public void setUpList() {
         itemList = new JList<>(directoryListToArray());
         itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

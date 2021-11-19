@@ -1,9 +1,16 @@
 package ui;
 
-    //EFFECT: instantiates directory app object
+import javax.swing.*;
+
+//EFFECT: instantiates directory app object
 public class Main {
     public static void main(String[] args) {
-        new DirectoryApp();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new BootUpInterface();
+            }
+        });
     }
 
 }

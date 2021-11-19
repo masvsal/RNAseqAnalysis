@@ -15,12 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+//menu containing all data files in currently selected experiment in data file directory
 public class DataFileDirectoryMenu extends Menu implements ListSelectionListener, ActionListener {
 
-    private Experiment experiment;
-    private ExperimentDirectory experimentDirectory;
-    private DataFileDisplay dataFileDisplay;
-    private String newName;
+    private Experiment experiment;                      //currently selected experiment
+    private ExperimentDirectory experimentDirectory;     //main data structure reference
+    private DataFileDisplay dataFileDisplay;            //reference to display that depends on currently selected file
+    private String newName;                             //holds user-inputted name while data is still being inputted
 
 
     //EFFECT: creates new data file directory menu object with a border layout, given experiment directory
@@ -123,7 +124,7 @@ public class DataFileDirectoryMenu extends Menu implements ListSelectionListener
     @Override
     //Modifies: MainInterFace, this
     //Effect: creates a text field below current list prompting user to input name of a new experiment
-    public void addItemName() {
+    public void addItem() {
         super.createTextField("name");
         textField.setActionCommand("0");
     }
@@ -162,7 +163,7 @@ public class DataFileDirectoryMenu extends Menu implements ListSelectionListener
             } else if (e.getActionCommand().equals("1")) {
                 setData();
             } else {
-                addDescription(experiment);
+                saveAndShowDescription(experiment);
             }
             refreshDisplay();
         } catch (IndexOutOfBoundsException err) {

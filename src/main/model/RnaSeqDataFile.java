@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -61,11 +60,12 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
     //REQUIRES: threshold > 0, numOfGenes >= 0
     //EFFECT: returns an array list of n array lists, where n is the number of genes in .csv file
     // Each sub-list contains name & fold change of a gene in the RNAseq file with fold change >= to the given threshold
-    //sub-lists are ordered by magnitude of fold change
+    //sub-lists are ordered by magnitude of fold change if operator is true. If false, ordered regularly.
     // If numOfGenes == -1, include all genes with fold change >= threshold.
-    //genes are low-count filtered before their fold change is evaluated
+    //genes are low-count filtered before their fold change is evaluated.
+
     public ArrayList<ArrayList<String>> getGeneNamesWithSigChangeExpression(float threshold,
-                                                                                      Integer numOfGenes) {
+                                                                                      Integer numOfGenes, Boolean val) {
         ArrayList<ArrayList<String>> allSigNameAndFoldChange;
         ArrayList<ArrayList<String>> subSigNameAndFoldChange = new ArrayList<>();
 
@@ -80,17 +80,32 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
             }
         }
 
-        subSigNameAndFoldChange = orderFoldChangesLargeToSmall(subSigNameAndFoldChange);
+        if (val) {
+            subSigNameAndFoldChange = orderFoldChangesByMagnitudeLargeToSmall(subSigNameAndFoldChange);
+        } else {
+            subSigNameAndFoldChange = orderFoldChangesLargeToSmall(subSigNameAndFoldChange);
+        }
 
         return subSigNameAndFoldChange;
     }
 
+
+
     //EFFECT: returns ordered list of genes and fold changes, ordered by the magnitude of the fold change
-    private ArrayList<ArrayList<String>> orderFoldChangesLargeToSmall(
+    private ArrayList<ArrayList<String>> orderFoldChangesByMagnitudeLargeToSmall(
             ArrayList<ArrayList<String>> list) {
         ArrayList<ArrayList<String>> returnList = (ArrayList<ArrayList<String>>) list.stream()
                 .sorted((g1,g2) -> Double.compare(abs(Double.parseDouble(g2.get(1))),
                         abs(Double.parseDouble(g1.get(1))))).collect(Collectors.toList());
+        return returnList;
+    }
+
+    //EFFECT: returns ordered list of genes and fold changes.
+    private ArrayList<ArrayList<String>> orderFoldChangesLargeToSmall(
+            ArrayList<ArrayList<String>> list) {
+        ArrayList<ArrayList<String>> returnList = (ArrayList<ArrayList<String>>) list.stream()
+                .sorted((g1,g2) -> Double.compare((Double.parseDouble(g2.get(1))),
+                        (Double.parseDouble(g1.get(1))))).collect(Collectors.toList());
         return returnList;
     }
 

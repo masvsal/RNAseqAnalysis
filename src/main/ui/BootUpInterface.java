@@ -13,14 +13,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
+//Initial Frame shown on startup of GUI. Handles initialization of user data
+//either loads from disk or creates default data
 public class BootUpInterface extends JFrame implements ActionListener {
-    private static int WIDTH = 350;
-    private static int HEIGHT = 200;
-    ExperimentDirectory experimentDirectory;
+    private static int WIDTH = 350;             //width of frame
+    private static int HEIGHT = 200;            //height of frame
+    ExperimentDirectory experimentDirectory;    //directory storing user data
 
-    public BootUpInterface(ExperimentDirectory experimentDirectory) {
+    //MODIFIES: this
+    //EFFECTS: instantiates new BootUpInterface Object.
+    public BootUpInterface() {
         super("Bootup Sequence");
-        this.experimentDirectory = experimentDirectory;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new FlowLayout());
@@ -28,10 +31,10 @@ public class BootUpInterface extends JFrame implements ActionListener {
         addTools();
         setVisible(true);
         validate();
-
-
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates and adds tools and display message to frame.
     private void addTools() {
         JButton yesBut = new JButton("Yes");
         JButton noBut = new JButton("No");
@@ -65,15 +68,15 @@ public class BootUpInterface extends JFrame implements ActionListener {
         }
     }
 
-    //MDOFIES: this
-    //EFFECTS: Closes window
+    //MODIFIES: this
+    //EFFECTS: closes boot-up interface
     private void closeBootupScreen() {
         this.dispose();
     }
 
     //MODIFIES: this
-    //EFFECTS: initializes experiment directory, 2 experiments, and 4 data files.
-    //places 2 data files in each experiment. Places experiments in experiment directory
+    //EFFECTS: initializes default experiment directory, containing 2 experiments and 4 data files.
+    //places 2 data files in each experiment. Places experiments in experiment directory.
     public void init() {
         experimentDirectory = new ExperimentDirectory();
 
@@ -104,6 +107,9 @@ public class BootUpInterface extends JFrame implements ActionListener {
         experimentDirectory.addFile(experiment3);
     }
 
+    //MODIFIES: this
+    //EFFECTS: reloads data from disk or initializes default then creates main interface object
+    // and quits out of bootup interface.
     @Override
     public void actionPerformed(ActionEvent e) {
 

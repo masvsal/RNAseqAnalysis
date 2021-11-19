@@ -22,6 +22,10 @@ I would like to work in bioinformatics so I want to understand the basic workflo
 - As a user, I want to be able to save my current experiment directory to file.
 - As a user, I want to have the option to load a saved experiment directory from file when I start my application.
 
+####User Stories - Phase 3
+- As a user, I want to be able to add multiple experiments or data files to experiment and data file directories
+- As a user I want to be able to remove multiple experiments or data files from the appropriate directories
+- As a user, I want to be able to see a graph of the fold change across all genes in an RNAseq file.
 
 ### Citations:
 - code in persistence package modelled off of CPSC210 JSONSerializationDemo:

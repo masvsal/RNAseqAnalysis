@@ -38,7 +38,7 @@ public class DirectoryApp {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new BootUpInterface(experimentDirectory);
+                new BootUpInterface();
             }
         });
     }
@@ -437,7 +437,8 @@ public class DirectoryApp {
         String numOfGenes = myObj.nextLine();
 
         ArrayList<ArrayList<String>> numOfChanges =
-                file.getGeneNamesWithSigChangeExpression(Float.parseFloat(threshold), Integer.parseInt(numOfGenes));
+                file.getGeneNamesWithSigChangeExpression(Float.parseFloat(threshold),
+                        Integer.parseInt(numOfGenes), true);
         int counter = 0;
 
         for (ArrayList<String> gene: numOfChanges) {

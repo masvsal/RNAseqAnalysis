@@ -21,13 +21,14 @@ public class RnaSeqDataFileTest {
                 new RnaSeqDataFile("test name", "test data", "data/RNAseqDataFileTests/NoData.csv");
 
         assertEquals(0,dataFile.countSigChangeExpression((float)2.0));
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, 0));
+        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression
+                ((float)2.0, 0, true));
         assertEquals(0, dataFile.getMean());
 
         assertEquals("data/RNAseqDataFileTests/NoData.csv",dataFile.getPath());
     }
 
-    private void list5Up5Down() {
+    private void list5Up5DownInOrderOfMagnitude() {
         ArrayList<String> listArray1 = new ArrayList<>();
         listArray1.add("yidK");
         listArray1.add("-1.9493177");
@@ -80,6 +81,62 @@ public class RnaSeqDataFileTest {
         arrayNameFoldChange.add(listArray1);
 
     }
+
+    private void list5Up5Down() {
+        ArrayList<String> listArray1 = new ArrayList<>();
+        listArray1.add("yidK");
+        listArray1.add("-1.9493177");
+
+        ArrayList<String> listArray2 = new ArrayList<>();
+        listArray2.add("yidL");
+        listArray2.add("-3.6319616");
+
+        ArrayList<String> listArray3 = new ArrayList<>();
+        listArray3.add("yidP");
+        listArray3.add("-2.051282");
+
+        ArrayList<String> listArray4 = new ArrayList<>();
+        listArray4.add("yidQ");
+        listArray4.add("-10.0");
+
+        ArrayList<String> listArray5 = new ArrayList<>();
+        listArray5.add("yidR");
+        listArray5.add("-2.0");
+
+        ArrayList<String> listArray6 = new ArrayList<>();
+        listArray6.add("yidX");
+        listArray6.add("2.6666667");
+
+        ArrayList<String> listArray7 = new ArrayList<>();
+        listArray7.add("yidZ");
+        listArray7.add("3.87");
+
+        ArrayList<String> listArray8 = new ArrayList<>();
+        listArray8.add("yieE");
+        listArray8.add("2.425");
+
+        ArrayList<String> listArray9 = new ArrayList<>();
+        listArray9.add("yieF");
+        listArray9.add("2.0");
+
+        ArrayList<String> listArray10 = new ArrayList<>();
+        listArray10.add("yieG");
+        listArray10.add("9.922066");
+
+        arrayNameFoldChange.add(listArray10);
+        arrayNameFoldChange.add(listArray7);
+        arrayNameFoldChange.add(listArray6);
+        arrayNameFoldChange.add(listArray8);
+        arrayNameFoldChange.add(listArray9);
+        arrayNameFoldChange.add(listArray1);
+        arrayNameFoldChange.add(listArray5);
+        arrayNameFoldChange.add(listArray3);
+        arrayNameFoldChange.add(listArray2);
+        arrayNameFoldChange.add(listArray4);
+
+    }
+
+
     //invalid path
     @Test
     public void testcountSignificantChangesInGeneExpressionInvalidPath() {
@@ -157,7 +214,8 @@ public class RnaSeqDataFileTest {
     @Test
     public void testGetGeneNamesWithSigChangeInvalidPath() {
         dataFile.setPath("data/RNAseqDataFileTests/InvalidPath.csv");
-        assertEquals(new ArrayList<>(), dataFile.getGeneNamesWithSigChangeExpression((float) 2.0, 10));
+        assertEquals(new ArrayList<>(),
+                dataFile.getGeneNamesWithSigChangeExpression((float) 2.0, 10,true));
     }
 
     //0 WT and Challenge condition detected
@@ -187,7 +245,8 @@ public class RnaSeqDataFileTest {
         listArray1.add("yidK");
         listArray1.add("-2.0");
         arrayNameFoldChange.add(listArray1);
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, 1));
+        assertEquals(arrayNameFoldChange, dataFile.
+                getGeneNamesWithSigChangeExpression((float)2.0, 1, true));
     }
 
     //file with 2 borderline significant changes in gene expression, threshold 2.0, first gene
@@ -206,27 +265,38 @@ public class RnaSeqDataFileTest {
         arrayNameFoldChange.add(listArray1);
         arrayNameFoldChange.add(listArray2);
 
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, -1));
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, 2));
+        assertEquals(arrayNameFoldChange,
+                dataFile.getGeneNamesWithSigChangeExpression((float)2.0, -1, true));
+        assertEquals(arrayNameFoldChange,
+                dataFile.getGeneNamesWithSigChangeExpression((float)2.0, 2 ,true));
     }
 
     //file with no significant changes in gene expression, threshold 100.0, all genes
     @Test
     public void testGetGeneNamesWithSigChangeExpression5Up5DownThreshold100AllGenes() {
         dataFile.setPath("data/RNAseqDataFileTests/5Down5Up.csv");
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)100.0, 0));
+        assertEquals(arrayNameFoldChange,
+                dataFile.getGeneNamesWithSigChangeExpression((float)100.0, 0, true));
     }
 
     //all significant changes in gene expression, threshold 1.0, all genes
     @Test
-    public void testGetGeneNamesWithSigChangeExpression5Up5DownThreshold1AllGenes() {
+    public void testGetGeneNamesWithSigChangeExpression5Up5DownThreshold1AllGenesTrue() {
         dataFile.setPath("data/RNAseqDataFileTests/5Down5Up.csv");
-        //arrayNameFoldChange = new String[][]{{"yidK", "-1.949"},{"yidL", "-3.631"},{"yidP", "-2.051"},{"yidQ", "-10.0"},
-        //        {"yidR", "-2.0"},{"yidX", "2.666"},{"yidZ", "3.87"},{"yieE", "2.425"},{"yieF", "2.0"},
-        //        {"yieG", "9.922"}};
-        list5Up5Down();
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)1.0, -1));
+        list5Up5DownInOrderOfMagnitude();
+        assertEquals(arrayNameFoldChange,
+                dataFile.getGeneNamesWithSigChangeExpression((float)1.0, -1, true));
     }
+
+    //all significant changes in gene expression, threshold 1.0, all genes
+    @Test
+    public void testGetGeneNamesWithSigChangeExpression5Up5DownThreshold1AllGenesFalse() {
+        dataFile.setPath("data/RNAseqDataFileTests/5Down5Up.csv");
+        list5Up5Down();
+        assertEquals(arrayNameFoldChange,
+                dataFile.getGeneNamesWithSigChangeExpression((float)1.0, -1, false));
+    }
+
     //all significant changes in gene expression, threshold 1.0, first 3 genes
     @Test
     public void testGetGeneNamesWithSigChangeExpression5Up5DownThreshold1First3Genes() {
@@ -248,7 +318,8 @@ public class RnaSeqDataFileTest {
         arrayNameFoldChange.add(listArray3);
         arrayNameFoldChange.add(listArray1);
 
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)1.0, 3));
+        assertEquals(arrayNameFoldChange,
+                dataFile.getGeneNamesWithSigChangeExpression((float)1.0, 3, true));
     }
 
     //threshold 5.0, more gene list available than exists
@@ -268,7 +339,8 @@ public class RnaSeqDataFileTest {
         arrayNameFoldChange.add(listArray4);
         arrayNameFoldChange.add(listArray10);
 
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)5.0, 3));
+        assertEquals(arrayNameFoldChange,
+                dataFile.getGeneNamesWithSigChangeExpression((float)5.0, 3, true));
     }
 
     //threshold 5.0, first gene
@@ -283,7 +355,8 @@ public class RnaSeqDataFileTest {
 
         arrayNameFoldChange.add(listArray4);
 
-        assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)5.0, 1));
+        assertEquals(arrayNameFoldChange,
+                dataFile.getGeneNamesWithSigChangeExpression((float)5.0, 1, true));
     }
 
     @Test
@@ -293,7 +366,7 @@ public class RnaSeqDataFileTest {
     }
 
     @Test
-    public void test5Up5Down() {
+    public void testGetMean5Up5Down() {
         dataFile.setPath("data/RNAseqDataFileTests/5Down5Up.csv");
         Float theMean = dataFile.getMean();
         assertEquals((float) 0.12511711, theMean);

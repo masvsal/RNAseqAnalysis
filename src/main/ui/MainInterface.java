@@ -9,18 +9,21 @@ import ui.tools.ToolBar;
 import javax.swing.*;
 import java.awt.*;
 
+//Main interface with which the user interacts. Persists throughout life of app.
 public class MainInterface extends JFrame {
-    public static final int WIDTH = 1000;
-    public static final int HEIGHT = 700;
+    public static final int WIDTH = 1000;   //width of interface
+    public static final int HEIGHT = 700;   //height of interface
 
+    //components in main interface
+    ExperimentDirectoryMenu experimentDirectoryMenu;    //menu that displays experiments in experiment directory
+    DataFileDirectoryMenu dataFileDirectoryMenu;        //menu that displays data files in currently selected experiment
+    DataFileDisplay display;                            //display that displays data in currently selected file
+    ToolBar toolBar;                                    //panel that contains all tools with which user interacts.
 
+    ExperimentDirectory experimentDirectory;            //data object that is modified by components of main interface
 
-    DataFileDirectoryMenu dataFileDirectoryMenu;
-    ExperimentDirectoryMenu experimentDirectoryMenu;
-    DataFileDisplay display;
-    ToolBar toolBar;
-    ExperimentDirectory experimentDirectory;
-
+    //MODIFIES: this
+    //EFFECTS: instantiates new main interface object.
     public MainInterface(ExperimentDirectory experimentDirectory) {
         super("Main Interface");
         this.experimentDirectory = experimentDirectory;
@@ -28,6 +31,7 @@ public class MainInterface extends JFrame {
         initializeDisplays(experimentDirectory);
     }
 
+    //getters. Returns height or width of interface, data directory menu, experiment directory menu, or toolbar
     public int getHeight() {
         return HEIGHT;
     }
@@ -48,6 +52,13 @@ public class MainInterface extends JFrame {
         return this.toolBar;
     }
 
+    public ExperimentDirectory getExperimentDirectory() {
+        return this.experimentDirectory;
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets behavior of main interface frame
+
     private void configure() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -56,7 +67,7 @@ public class MainInterface extends JFrame {
     }
 
     //MODIFIES: this
-    //EFFECTS: draws the JFrame window where the application operates
+    //EFFECTS: creates and adds main components of main interface to frame
     private void initializeDisplays(ExperimentDirectory experimentDirectory) {
         display = new DataFileDisplay(this);
         dataFileDirectoryMenu = new DataFileDirectoryMenu(this, display);
@@ -70,12 +81,6 @@ public class MainInterface extends JFrame {
         validate();
         pack();
     }
-
-    public ExperimentDirectory getExperimentDirectory() {
-        return this.experimentDirectory;
-    }
-
-
 }
 
 
