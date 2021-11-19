@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class BootUpInterface extends JFrame implements ActionListener {
@@ -21,6 +22,7 @@ public class BootUpInterface extends JFrame implements ActionListener {
         super("Bootup Sequence");
         this.experimentDirectory = experimentDirectory;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         setLayout(new FlowLayout());
         setSize(new Dimension(WIDTH, HEIGHT));
         addTools();
@@ -61,6 +63,12 @@ public class BootUpInterface extends JFrame implements ActionListener {
         } catch (IOException e) {
             System.out.println("Error: path not valid");
         }
+    }
+
+    //MDOFIES: this
+    //EFFECTS: Closes window
+    private void closeBootupScreen() {
+        this.dispose();
     }
 
     //MODIFIES: this
@@ -108,6 +116,7 @@ public class BootUpInterface extends JFrame implements ActionListener {
             @Override
             public void run() {
                 new MainInterface(experimentDirectory);
+                closeBootupScreen();
             }
         });
 

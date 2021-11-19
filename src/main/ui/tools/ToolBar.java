@@ -18,6 +18,7 @@ public class ToolBar extends JPanel {
     ModifyTool modifyTool;
     SaveTool saveTool;
     ConfirmTool confirmTool;
+    CountSigGeneExpressionTool countSigGeneExpressionTool;
     DataFileDirectoryMenu dataFileDirectoryMenu;
     ExperimentDirectoryMenu experimentDirectoryMenu;
     Color color = Color.GRAY;
@@ -37,6 +38,10 @@ public class ToolBar extends JPanel {
         this.experimentDirectoryMenu = parent.getExperimentDirectoryMenu();
 
         initializeTools(experimentDirectory);
+    }
+
+    public static int getPaneY() {
+        return PANE_Y;
     }
 
     public void setActiveList(Menu activeList) {
@@ -70,6 +75,8 @@ public class ToolBar extends JPanel {
         saveTool = new SaveTool(this);
         confirmTool = new ConfirmTool(this, modifyTool);
         confirmTool.setVisibility(false);
+        countSigGeneExpressionTool = new CountSigGeneExpressionTool(this);
+        countSigGeneExpressionTool.setVisibility(false);
 
         saveTool.addToParent(listPanel);
         addTool.addToParent(listPanel);
@@ -77,6 +84,7 @@ public class ToolBar extends JPanel {
 
         modifyTool.addToParent(displayPanel);
         confirmTool.addToParent(displayPanel);
+        countSigGeneExpressionTool.addToParent(displayPanel);
 
         add(BorderLayout.WEST, listPanel);
         add(BorderLayout.EAST, displayPanel);
@@ -84,6 +92,11 @@ public class ToolBar extends JPanel {
 
     public void showConfirmTool(Boolean operator) {
         confirmTool.setVisibility(operator);
+        modifyTool.setVisibility((!operator));
+    }
+
+    public void showRNAseqTools(Boolean operator) {
+        countSigGeneExpressionTool.setVisibility(operator);
     }
 
 }

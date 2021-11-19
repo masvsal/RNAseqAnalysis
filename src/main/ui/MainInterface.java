@@ -10,8 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainInterface extends JFrame {
-    public static final int WIDTH = 700;
-    public static final int HEIGHT = 500;
+    public static final int WIDTH = 1000;
+    public static final int HEIGHT = 700;
 
 
 
@@ -26,6 +26,14 @@ public class MainInterface extends JFrame {
         this.experimentDirectory = experimentDirectory;
         configure();
         initializeDisplays(experimentDirectory);
+    }
+
+    public int getHeight() {
+        return HEIGHT;
+    }
+
+    public int getWidth() {
+        return WIDTH;
     }
 
     public DataFileDirectoryMenu getDataFileDirectoryMenu() {
@@ -66,6 +74,7 @@ public class MainInterface extends JFrame {
     public ExperimentDirectory getExperimentDirectory() {
         return this.experimentDirectory;
     }
+
 
 }
 

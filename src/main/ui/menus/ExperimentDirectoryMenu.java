@@ -7,6 +7,7 @@ import model.interfaces.NamedFile;
 import ui.MainInterface;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -18,38 +19,35 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
     private ExperimentDirectory experimentDirectory;
     private DataFileDirectoryMenu dataFileDirectoryMenu;
 
+
+
     public ExperimentDirectoryMenu(DataFileDirectoryMenu dataFileDirectoryMenu, MainInterface mainInterface) {
         super(mainInterface);
         new JPanel();
         setPreferredSize(new Dimension(PANE_X, PANE_Y));
-        setLayout(new BorderLayout());
+        setLayout(new BoxLayout(this, 1));
 
-        this.experimentDirectory = mainInterface.getExperimentDirectory();;
+        this.experimentDirectory = mainInterface.getExperimentDirectory();
 
         this.dataFileDirectoryMenu = dataFileDirectoryMenu;
 
         selection = new JLabel("Please choose an experiment");
-        selection.setHorizontalAlignment(0);
+        selection.setHorizontalAlignment(SwingConstants.CENTER);
 
-        add(BorderLayout.NORTH, selection);
 
+        selectionPanel = new JPanel();
+        selectionPanel.setMaximumSize(new Dimension(PANE_X, 75));
+
+
+        selectionPanel.add(selection);
+        selectionPanel.setBorder(new LineBorder(Color.BLACK));
+
+        add(selectionPanel);
         setUpList();
 
+        mainInterface.pack();
         setVisible(true);
     }
-
-//    private void createTools() {
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new FlowLayout());
-//        panel.setVisible(true);
-//        panel.setSize(new Dimension(200, 200));
-//
-//        AddTool addTool = new AddTool(experimentDirectory, panel);
-//        DeleteTool deleteTool = new DeleteTool(experimentDirectory, panel);
-//        ModifyDescriptionTool modifyDescriptionTool = new ModifyDescriptionTool(experimentDirectory, panel);
-//
-//        add(BorderLayout.SOUTH, panel);
-//    }
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
@@ -60,16 +58,17 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
             dataFileDirectoryMenu.addExperimentList(selectedExperimentName);
             mainInterface.getToolBar().setActiveList(this);
             mainInterface.validate();
+            mainInterface.pack();
         } else {
             selection.setText("choose experiment");
         }
     }
 
-    //EFFECTS: takes the experimentDirectory field and returns the name of contained experiments in array
+    //EFFECTS: returns a string array of the names of experiments in experiment directory field
     private String[] directoryListToArray() {
         ArrayList<String> listOfNames = new ArrayList<>();
 
-        for (Experiment e:experimentDirectory.getListofExperiments()) {
+        for (NamedFile e:experimentDirectory.getListofExperiments()) {
             listOfNames.add(e.getName());
         }
 
@@ -77,28 +76,37 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
     }
 
     @Override
+    //Modifies: MainInterFace, this
+    //Effect: creates a text field below list prompting user to input name of a new experiment
     public void addItemName() {
         createTextField("name");
         textField.setActionCommand("0");
     }
 
     @Override
+    //Modifies: mainInterface, this
+    //effects: removes selected experiment from experiment directory field
     public void removeItem() {
         experimentDirectory.removeFile(idx + 1);
 
-        remove(itemList);
+        remove(scrollPane);
         setUpList();
 
-        mainInterface.validate();
+        mainInterface.pack();
     }
 
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("0")) {
-            addName();
-        } else if (e.getActionCommand().equals("2")) {
-            addDescription(experimentDirectory);
-            dataFileDirectoryMenu.refreshDisplay();
+        try {
+            if (e.getActionCommand().equals("0")) {
+                addName();
+                mainInterface.validate();
+            } else if (e.getActionCommand().equals("2")) {
+                addDescription(experimentDirectory);
+                dataFileDirectoryMenu.refreshDisplay();
+            }
+        } catch (IndexOutOfBoundsException err) {
+            textField.setText("Bad Input. Please try again:");
         }
     }
 
@@ -111,11 +119,13 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
 
         experimentDirectory.addFile(newExperiment);
 
-        remove(itemList);
-        setUpList();
-        remove(textField);
+        selectionPanel.remove(textField);
 
+        remove(scrollPane);
         mainInterface.validate();
+        setUpList();
+
+        mainInterface.pack();
     }
 
 
@@ -124,10 +134,11 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
         itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         scrollPane = new JScrollPane(itemList);
-        scrollPane.setPreferredSize(new Dimension(SCROLL_PANE_X, SCROLL_PANE_Y));
 
+        scrollPane.setBorder(new LineBorder(Color.BLACK));
+        scrollPane.setMaximumSize(new Dimension(PANE_X, PANE_Y - 100));
         itemList.addListSelectionListener(this);
 
-        add(BorderLayout.CENTER, itemList);
+        add(scrollPane);
     }
 }

@@ -21,7 +21,7 @@ public class ModifyTool extends Tool implements ActionListener {
 
 
     public void confirmModify() {
-        display.createUnModifiableDisplayPanel();
+        display.saveModifiedPanel();
         toolBar.showConfirmTool(false);
     }
 

@@ -22,6 +22,7 @@ public class RnaSeqDataFileTest {
 
         assertEquals(0,dataFile.countSigChangeExpression((float)2.0));
         assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)2.0, 0));
+        assertEquals(0, dataFile.getMean());
 
         assertEquals("data/RNAseqDataFileTests/NoData.csv",dataFile.getPath());
     }
@@ -140,9 +141,6 @@ public class RnaSeqDataFileTest {
 
     //set path tests
 
-    //blank row "" "" 0 0
-    @Test
-    public void testNewRow() {}
 
     //same name and operon "x" "x" 0 0
     //same WT and Challenge copy # "x" "y" z z
@@ -288,6 +286,24 @@ public class RnaSeqDataFileTest {
         assertEquals(arrayNameFoldChange, dataFile.getGeneNamesWithSigChangeExpression((float)5.0, 1));
     }
 
+    @Test
+    public void testGetMeanBorderlineCase() {
+        dataFile.setPath("data/RNAseqDataFileTests/BorderlineCase.csv");
+        assertEquals(0, dataFile.getMean());
+    }
+
+    @Test
+    public void test5Up5Down() {
+        dataFile.setPath("data/RNAseqDataFileTests/5Down5Up.csv");
+        Float theMean = dataFile.getMean();
+        assertEquals((float) 0.12511711, theMean);
+    }
+
+    @Test
+    public void testGetStandardDeviation() {
+        dataFile.setPath("data/RNAseqDataFileTests/5Down5Up.csv");
+        assertEquals(5.327686786651611, dataFile.getStandardDeviation());
+    }
     //test toJson
     //test with path
 

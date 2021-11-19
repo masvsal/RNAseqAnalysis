@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="/data/RNAseqDataFileTests/0Detected.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/data/RNAseqDataFileTests/5Down5Up.csv">
           <value>
             <Attribute>

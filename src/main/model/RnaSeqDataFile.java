@@ -210,4 +210,34 @@ public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
 
     }
 
+    //Effects: Returns mean fold change of given data sample
+    public float getMean() {
+        float total = (float) 0;
+        ArrayList<ArrayList<String>> output = getAllGenesWithSigChangeExpression(0);
+        float size = (float) output.size();
+        for (ArrayList<String> a : output) {
+            total = total + Float.parseFloat(a.get(1));
+        }
+        if (size == 0) {
+            return (float) 0;
+        }
+
+        return total / size;
+    }
+
+    //effect: returns the standard deviation within given RNAseq data sample
+    public float getStandardDeviation() {
+        ArrayList<ArrayList<String>> output = getAllGenesWithSigChangeExpression(0);
+        float mean = getMean();
+        float summation = (float) 0;
+        for (ArrayList<String> a : output) {
+            Float difference = (Float.parseFloat(a.get(1)) - mean);
+            summation = summation + (difference * difference);
+        }
+        float divided = summation / ((float)(output.size() - 1));
+        return (float) sqrt(divided);
+    }
+
+
+
 }

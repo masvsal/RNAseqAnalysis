@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public abstract class Menu extends JComponent implements ActionListener {
-    protected static int PANE_X = 300;
-    protected static int PANE_Y = 300;
+    protected static int PANE_X = 250;
+    protected static int PANE_Y = 650;
     protected static int SCROLL_PANE_X = 150;
     protected static int SCROLL_PANE_Y = 90;
     protected JTextField textField;
@@ -22,6 +22,8 @@ public abstract class Menu extends JComponent implements ActionListener {
     protected JLabel selection;
     protected int idx;
     protected String selectedExperimentName;
+    protected JPanel selectionPanel;
+
 
     public Menu(MainInterface mainInterface) {
         this.mainInterface = mainInterface;
@@ -46,11 +48,11 @@ public abstract class Menu extends JComponent implements ActionListener {
 
     // REQUIRES: passed string must not contain the colon character ":"
     protected void createTextField(String textToDisplay) {
-        textField = new JTextField(textToDisplay + ":", PANE_X);
+        textField = new JTextField(textToDisplay + ":", 20);
         textField.addActionListener(this);
-        add(BorderLayout.SOUTH, textField);
+        selectionPanel.add(textField);
+        mainInterface.pack();
 
-        mainInterface.validate();
     }
 
     protected void addDescription(Directory directory) {
