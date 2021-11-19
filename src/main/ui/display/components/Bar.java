@@ -24,6 +24,8 @@ public class Bar extends JComponent {
         panesSize = paneWidth;
         this.lowestFC = lowestFC;
         this.highestFC = highestFC;
+        System.out.println(panesSize);
+        System.out.println(widthOfBucket);
 
     }
     //modifies: this
@@ -40,6 +42,9 @@ public class Bar extends JComponent {
         for (int i: dataArray) {
             if (counter == numberOfBuckets) {
                 ((Graphics2D) g).setPaint(Color.red);
+            }
+            if (i <= 3 && i > 0) {
+                g.drawString(String.valueOf(i), x, 50);
             }
             g.drawRect(x,30,width,i);
             g.fillRect(x,30,width, i);

@@ -57,8 +57,12 @@ public class Graph extends JFrame {
     private void drawGraph() {
         System.out.println(Arrays.toString(histogramDataArray));
         int widthOfBucket = WIDTH / numOfBucketsRounded;
-        System.out.println(widthOfBucket);
-        add(new Bar(histogramDataArray, widthOfBucket, standardDev, lowestFC, highestFC, WIDTH));
+        int paneWidth = widthOfBucket * numOfBucketsRounded;
+        setSize(new Dimension(paneWidth, HEIGHT));
+        System.out.println("width of each bucket" + widthOfBucket);
+        System.out.println("num of buckets" + numOfBucketsRounded);
+        add(new Bar(histogramDataArray, widthOfBucket, standardDev, lowestFC, highestFC, paneWidth));
+        validate();
     }
 
     //modifies: this
