@@ -3,6 +3,8 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -109,7 +111,13 @@ public class ExperimentTest {
         experiment.addFile(newFile2);
         experiment.addFile(newFile3);
 
+        LinkedList<GenericDataFile> linkedList = new LinkedList<>();
+        linkedList.add(newFile1);
+        linkedList.add(newFile2);
+        linkedList.add(newFile3);
+
         assertEquals(newFile1, experiment.getFile(1));
+        assertEquals(linkedList, experiment.getListOfDataFiles());
     }
 
     @Test

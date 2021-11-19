@@ -4,6 +4,8 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -124,6 +126,12 @@ public class ExperimentDirectoryTest {
         experimentDirectory.addFile(newExperiment2);
         experimentDirectory.addFile(newExperiment3);
 
+        LinkedList<Experiment> linkedList = new LinkedList<>();
+        linkedList.add(newExperiment1);
+        linkedList.add(newExperiment2);
+        linkedList.add(newExperiment3);
+
+        assertEquals(linkedList, experimentDirectory.getListofExperiments());
         assertEquals(3,experimentDirectory.length());
 
         experimentDirectory.removeFile(1);
