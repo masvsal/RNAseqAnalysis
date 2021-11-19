@@ -31,26 +31,38 @@ public class MainInterface extends JFrame {
         initializeDisplays(experimentDirectory);
     }
 
-    //getters. Returns height or width of interface, data directory menu, experiment directory menu, or toolbar
+    //getters.
+    //effects: returns height
+
     public int getHeight() {
         return HEIGHT;
     }
+
+    //effects: returns width
 
     public int getWidth() {
         return WIDTH;
     }
 
+    //effects: returns dataFileDirectoryMenu
+
     public DataFileDirectoryMenu getDataFileDirectoryMenu() {
         return dataFileDirectoryMenu;
     }
+
+    //effects: returns ExperimentDirectoryMenu
 
     public ExperimentDirectoryMenu getExperimentDirectoryMenu() {
         return experimentDirectoryMenu;
     }
 
+    //effects: returns ToolBar
+
     public ToolBar getToolBar() {
         return this.toolBar;
     }
+
+    //effects: returns ExperimentDirectory
 
     public ExperimentDirectory getExperimentDirectory() {
         return this.experimentDirectory;

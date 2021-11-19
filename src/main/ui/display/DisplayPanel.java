@@ -7,21 +7,26 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
+//abstract component of data file display contianing information and information for displaypanel
 public abstract class DisplayPanel extends JPanel {
-    Experiment experiment;
-    GenericDataFile dataFile;
+    private static int PANE_X; //height of this
+    private static int PANE_Y;  //width of this
 
-    DataFileDisplay parent;
+    Experiment experiment;      //experiment containing data file
+    GenericDataFile dataFile;   //data file to display
 
-    JPanel experimentPanel = new JPanel();
-    JPanel dataPanel = new JPanel();
-    JPanel visualPanel = new JPanel();
-    JLabel experimentName;
-    JLabel name;
+    DataFileDisplay parent;     //parent component which this is added to
 
-    private static int PANE_X;
-    private static int PANE_Y;
+    JPanel experimentPanel = new JPanel();  //component of this contianing information about experiment
+    JPanel dataPanel = new JPanel();        //component of this containing info about data file
+    JPanel visualPanel = new JPanel();      //componenet of this containing tabulated info about data file
+    JLabel experimentName;                  //name of experiment to display
+    JLabel name;                            //name of data file to display
 
+
+
+    //MODIFIES: this
+    //EFFECTS:  instantiates new DisplayPanel object. Sets up panel.
     public DisplayPanel(Experiment experiment, GenericDataFile dataFile, DataFileDisplay parent) {
         new JPanel();
         this.parent = parent;
@@ -37,12 +42,16 @@ public abstract class DisplayPanel extends JPanel {
         setUpUnModifiableElements();
     }
 
+    //modifies: this
+    //effects: removes all panels from display panel
     protected void clearPanels() {
         remove(experimentPanel);
         remove(dataPanel);
         remove(visualPanel);
     }
 
+    //MODIFIES: this
+    //EFFECTS:  creates and adds new panels to display panel
     protected void setUpPanels() {
         experimentPanel = new JPanel();
         experimentPanel.setLayout(new BorderLayout());
@@ -53,12 +62,19 @@ public abstract class DisplayPanel extends JPanel {
         dataPanel.setMaximumSize(new Dimension(PANE_X, PANE_Y / 2));
     }
 
+    //MODIFIES: this
+    //EFFECTS:  creates and adds new labels that are not modifiable by the user. Includes names of experiment and
+    //data file
     private void setUpUnModifiableElements() {
         experimentName = new JLabel("Experiment: " + experiment.getName());
         name = new JLabel("Name: " + dataFile.getName());
     }
 
+    //modifies: this
+    //changes information about data file to reflect most current state of information
     public abstract void refreshDataPanel();
 
+    //modifies: this
+    //effects: saves any changes to the data panel to experiment directory.
     public abstract void saveModifiedInformation();
 }
