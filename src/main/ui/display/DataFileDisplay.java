@@ -53,16 +53,16 @@ public class DataFileDisplay extends JComponent {
         mainInterface.validate();
     }
 
-    public void refreshDataDisplay() {
-        mainPanel.refreshDataPanel();
-    }
-
     public void displayDataFile() {
         if (dataFile != null) {
             createUnModifiableDisplayPanel();
             createOverviewIfRNAseqFile();
         }
         mainInterface.validate();
+    }
+
+    public void refreshDataDisplay() {
+        mainPanel.refreshDataPanel();
     }
 
 
