@@ -5,6 +5,8 @@ import model.ExperimentDirectory;
 import model.GenericDataFile;
 import ui.MainInterface;
 import ui.display.DataFileDisplay;
+import ui.logging.Event;
+import ui.logging.EventLog;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -141,6 +143,10 @@ public class DataFileDirectoryMenu extends Menu implements ListSelectionListener
     //Modifies: MainInterFace, this
     //Effect: removes item from current experiment directory
     public void removeItem() {
+        String nameOfRemoved = experiment.getFile(idx + 1).getName();
+        EventLog.getInstance().logEvent(
+                new Event("DATA FILE: " + nameOfRemoved + "|" + "REMOVED FROM: " + experiment.getName())
+        );
         experiment.removeFile(idx + 1);
         if (experiment.getListOfDataFiles().size() == 0) {
             experiment.addFile(new GenericDataFile("EmptyFile", "000"));
@@ -191,6 +197,9 @@ public class DataFileDirectoryMenu extends Menu implements ListSelectionListener
 
         experiment.addFile(new GenericDataFile(newName, newData));
         addExperimentList(experiment.getName());
+        EventLog.getInstance().logEvent(
+                new Event("DATA FILE: " + newName + "|" + "Added to: " + experiment.getName())
+        );
 
         mainInterface.validate();
     }

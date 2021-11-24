@@ -1,18 +1,52 @@
-{"listOfExperiments": [{
-    "listOfFiles": [
-        {
-            "path": "data/RNAseqExampleFiles/Nac_RNASeq _ NoFC_v2.csv",
-            "data": "# of significant changes @ threshold: 30.0 = 211",
-            "name": "TF = NaC",
-            "description": "no description"
-        },
-        {
-            "path": "data/RNAseqExampleFiles/CsiR_RNAseq_NoFC_v2.csv",
-            "data": "Analysis not run yet",
-            "name": "TF = CsiR",
-            "description": "no description"
-        }
-    ],
-    "name": "RNAseq",
-    "description": ""
-}]}
+{"listOfExperiments": [
+    {
+        "listOfFiles": [
+            {
+                "data": "sample survival rate = 98%",
+                "name": "trial 1, pH = 5",
+                "description": ""
+            },
+            {
+                "data": "sample survival rate = 13%",
+                "name": "trial 2, pH = 10",
+                "description": ""
+            }
+        ],
+        "name": "Effect of pH on E. Coli",
+        "description": ""
+    },
+    {
+        "listOfFiles": [
+            {
+                "data": "sample survival rate = 100%",
+                "name": "trial 1, Temp = 70 F",
+                "description": ""
+            },
+            {
+                "data": "sample survival rate = 10%",
+                "name": "trial 2, Temp = 100 F",
+                "description": ""
+            }
+        ],
+        "name": "Effect of Temperature on E. Coli",
+        "description": ""
+    },
+    {
+        "listOfFiles": [
+            {
+                "path": "data/RNAseqExampleFiles/Nac_RNASeq _ NoFC_v2.csv",
+                "data": "# of significant changes @ threshold: 300.0 = 1",
+                "name": "TF = NaC",
+                "description": "no description"
+            },
+            {
+                "path": "data/RNAseqExampleFiles/CsiR_RNAseq_NoFC_v2.csv",
+                "data": "# of significant changes @ threshold: 300.0 = 28",
+                "name": "TF = CsiR",
+                "description": "no description"
+            }
+        ],
+        "name": "RNAseq",
+        "description": ""
+    }
+]}

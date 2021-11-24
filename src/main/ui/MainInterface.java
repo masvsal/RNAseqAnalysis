@@ -2,12 +2,16 @@ package ui;
 
 import model.ExperimentDirectory;
 import ui.display.DataFileDisplay;
+import ui.logging.EventLog;
 import ui.menus.DataFileDirectoryMenu;
 import ui.menus.ExperimentDirectoryMenu;
+import ui.menus.ScreenPrinter;
 import ui.tools.ToolBar;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 //Main interface with which the user interacts. Persists throughout life of app.
 public class MainInterface extends JFrame {
@@ -72,10 +76,56 @@ public class MainInterface extends JFrame {
     //EFFECTS: sets behavior of main interface frame
 
     private void configure() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setVisible(true);
+        setCloseBehavior();
+    }
+
+
+    //MODIFIES: this
+    //effects: sets default close behavior
+
+    public void setCloseBehavior() {
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                configureClosingOperation();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+    }
+
+    private void configureClosingOperation() {
+        ScreenPrinter printer = new ScreenPrinter(EventLog.getInstance());
+        printer.printLogToConsole();
+        System.exit(0);
     }
 
     //MODIFIES: this
@@ -93,6 +143,8 @@ public class MainInterface extends JFrame {
         validate();
         pack();
     }
+
+
 }
 
 

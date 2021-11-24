@@ -5,6 +5,8 @@ import model.ExperimentDirectory;
 import model.GenericDataFile;
 import model.interfaces.NamedFile;
 import ui.MainInterface;
+import ui.logging.Event;
+import ui.logging.EventLog;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -94,6 +96,10 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
     //Modifies: mainInterface, this
     //effects: removes selected experiment from experiment directory field
     public void removeItem() {
+        String nameOfRemovedFile = experimentDirectory.getFile(idx + 1).getName();
+        EventLog.getInstance().logEvent(
+                new Event("DATA FILE: " + nameOfRemovedFile + "|" + "REMOVED FROM: Experiment Directory")
+        );
         experimentDirectory.removeFile(idx + 1);
 
         remove(scrollPane);
@@ -121,13 +127,17 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
     }
 
     //modifies: this
-    //effects: creates new experiment containing a null file. Shows experiment in menu.
+    //effects: creates new experiment containing a null file. Shows experiment in menu. Records add to log
     private void addName() {
         String name = textField.getText();
         String newName = name.split(":")[1];
 
         Experiment newExperiment = new Experiment(newName);
         newExperiment.addFile(new GenericDataFile("nullfile", "000"));
+
+        EventLog.getInstance().logEvent(
+                new Event("EXPERIMENT: " + newName + "|" + "ADDED TO: Experiment Directory")
+        );
 
         experimentDirectory.addFile(newExperiment);
 
