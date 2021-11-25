@@ -1,7 +1,6 @@
-package ui.menus;
+package model.logging;
 
-import ui.logging.Event;
-import ui.logging.EventLog;
+import model.logging.*;
 
 //prints log to console
 public class ScreenPrinter {

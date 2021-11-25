@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Scanner;
+import model.logging.Event;
+import model.logging.EventLog;
 
 //visual element of display panel. Visible when rna seq file is displayed
 public class RNAseqOverviewDisplay extends JPanel implements ActionListener {
@@ -133,7 +135,11 @@ public class RNAseqOverviewDisplay extends JPanel implements ActionListener {
     //Effect: performs differential expression count given a threshold. Saves it to data field in data file.
     private void executeDiffExpressionCount(float threshold) {
         Integer numOfChanges = dataFile.countSigChangeExpression(threshold);
-        dataFile.setData("# of significant changes @ threshold: " + threshold + " = " + numOfChanges);
+        String newData = "# of significant changes @ threshold: " + threshold + " = " + numOfChanges;
+        dataFile.setData(newData);
+        EventLog.getInstance().logEvent(
+                new Event("DATA FILE: " + dataFile.getName() + "|" + "DATA MODIFIED: "
+                        + newData));
         parent.refreshDataDisplay();
     }
 

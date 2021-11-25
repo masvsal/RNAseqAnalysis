@@ -2,10 +2,9 @@ package ui;
 
 import model.ExperimentDirectory;
 import ui.display.DataFileDisplay;
-import ui.logging.EventLog;
 import ui.menus.DataFileDirectoryMenu;
 import ui.menus.ExperimentDirectoryMenu;
-import ui.menus.ScreenPrinter;
+import model.logging.*;
 import ui.tools.ToolBar;
 
 import javax.swing.*;
@@ -87,6 +86,7 @@ public class MainInterface extends JFrame {
     //MODIFIES: this
     //effects: sets default close behavior
 
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     public void setCloseBehavior() {
         addWindowListener(new WindowListener() {
             @Override

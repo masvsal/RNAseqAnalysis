@@ -2,7 +2,8 @@ package ui.display;
 
 import model.Experiment;
 import model.GenericDataFile;
-
+import model.logging.Event;
+import model.logging.EventLog;
 import javax.swing.*;
 import java.awt.*;
 
@@ -59,10 +60,19 @@ public class ModifiableDisplayPanel extends DisplayPanel {
     public void saveModifiedInformation() {
         if (experimentDescription != null && description != null && data != null) {
             experiment.setDescription(experimentDescription.getText());
+            EventLog.getInstance().logEvent(
+                    new Event("EXPERIMENT: " + experiment.getName() + "|" + "DESCRIPTION MODIFIED: "
+                            + experimentDescription.getText()));
             experimentDescription = null;
             dataFile.setDescription(description.getText());
+            EventLog.getInstance().logEvent(
+                    new Event("DATA FILE: " + dataFile.getName() + "|" + "DESCRIPTION MODIFIED: "
+                            + description.getText()));
             description = null;
             dataFile.setData(data.getText());
+            EventLog.getInstance().logEvent(
+                    new Event("DATA FILE: " + dataFile.getName() + "|" + "DATA MODIFIED: "
+                            + data.getText()));
             data = null;
         }
     }

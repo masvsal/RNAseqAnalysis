@@ -5,8 +5,8 @@ import model.ExperimentDirectory;
 import model.GenericDataFile;
 import model.interfaces.NamedFile;
 import ui.MainInterface;
-import ui.logging.Event;
-import ui.logging.EventLog;
+import model.logging.Event;
+import model.logging.EventLog;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
