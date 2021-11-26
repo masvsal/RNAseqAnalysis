@@ -14,7 +14,7 @@ import static java.lang.Math.sqrt;
 
 //a subtype of the datafile class. Stores a reference to, and interacts with, RNAseq output file.
 
-public class RnaSeqDataFile extends GenericDataFile implements NamedFile {
+public class RnaSeqDataFile extends GenericDataFile {
     private static double LOW_COUNT_THRESHOLD = 0.5; //Lowest possible level of expression to be considered for
                                                     // diff gene expression analysis.
     private String path;                            //Relative path to RNAseq output file (.csv).

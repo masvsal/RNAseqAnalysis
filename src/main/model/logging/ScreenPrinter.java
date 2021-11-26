@@ -2,17 +2,20 @@ package model.logging;
 
 import model.logging.*;
 
-//prints log to console
+//prints contents of Eventlog  to console on closure of application
 public class ScreenPrinter {
-    private EventLog eventLog;
+    private EventLog eventLog; //event log to print
 
 
+    //MODIFIES: THIS
+    //EFFECTS: instantiates new ScreenPrinter Object
     public ScreenPrinter(EventLog e) {
         this.eventLog = e;
     }
 
 
-    //EFFECT: prints contents of log line by line to console.
+    //EFFECT: prints contents of Events in EventLog line by line to console sequentially. Each entry is labelled with
+    //number and date.
     public void printLogToConsole() {
         int counter = 1;
         for (Event ev: eventLog) {

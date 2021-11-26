@@ -35,18 +35,32 @@
         "listOfFiles": [
             {
                 "path": "data/RNAseqExampleFiles/Nac_RNASeq _ NoFC_v2.csv",
-                "data": "# of significant changes @ threshold: 300.0 = 1",
+                "data": "Analysis not run yet",
                 "name": "TF = NaC",
                 "description": "no description"
             },
             {
                 "path": "data/RNAseqExampleFiles/CsiR_RNAseq_NoFC_v2.csv",
-                "data": "# of significant changes @ threshold: 300.0 = 28",
+                "data": "# of significant changes @ threshold: 100.0 = 65",
                 "name": "TF = CsiR",
                 "description": "no description"
+            },
+            {
+                "data": "fdinfds",
+                "name": "fjds fdsfds",
+                "description": ""
             }
         ],
         "name": "RNAseq",
+        "description": ""
+    },
+    {
+        "listOfFiles": [{
+            "data": "000",
+            "name": "nullfile",
+            "description": ""
+        }],
+        "name": "bsfdf",
         "description": ""
     }
 ]}

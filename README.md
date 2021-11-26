@@ -27,6 +27,17 @@ I would like to work in bioinformatics so I want to understand the basic workflo
 - As a user I want to be able to remove multiple experiments or data files from the appropriate directories
 - As a user, I want to be able to see a graph of the fold change across all genes in an RNAseq file.
 
+####Phase 4 - Task 3
+- reflect on the structure of my project
+- Given further time, I would implement the following changes/refactoring into my project
+  - reduce coupling in the UI package 
+    - reduce references to experiment directory by storing it once in main interface and referring to this field 
+    in all other classes
+  - implementing the composite design pattern in the model package. 
+    - named file = leaf
+    - directory = composite
+- 
+
 ### Citations:
 - code in persistence package modelled off of CPSC210 JSONSerializationDemo:
 https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
