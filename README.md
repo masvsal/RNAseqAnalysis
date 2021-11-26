@@ -34,7 +34,7 @@ I would like to work in bioinformatics so I want to understand the basic workflo
 - UI package:
    - reduce references to experiment directory, experiment and data file classes by storing each field once in the main interface class and "getting" this field in all other classes
    - implement an observer - observable design pattern between the experiment directory/data file directory classes and the data file directory/data file display classes. 
-   - store tools as a list in toolbar instead of storing each in an individual field.
+   - instead of storing each in an individual field, store tool objects as a list field in toolbar.
 - model package:
   - implement a composite pattern to store data files. named file = leaf, directory = composite. This would reduce redundancies in methods between classes and would make return types easier to deal with.
 
