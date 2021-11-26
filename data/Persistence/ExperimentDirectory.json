@@ -25,11 +25,11 @@
             {
                 "data": "sample survival rate = 10%",
                 "name": "trial 2, Temp = 100 F",
-                "description": ""
+                "description": "kdsfxfcdsd"
             }
         ],
         "name": "Effect of Temperature on E. Coli",
-        "description": ""
+        "description": "fidnasdfds"
     },
     {
         "listOfFiles": [
@@ -41,26 +41,12 @@
             },
             {
                 "path": "data/RNAseqExampleFiles/CsiR_RNAseq_NoFC_v2.csv",
-                "data": "# of significant changes @ threshold: 100.0 = 65",
+                "data": "Analysis not run yet",
                 "name": "TF = CsiR",
                 "description": "no description"
-            },
-            {
-                "data": "fdinfds",
-                "name": "fjds fdsfds",
-                "description": ""
             }
         ],
         "name": "RNAseq",
-        "description": ""
-    },
-    {
-        "listOfFiles": [{
-            "data": "000",
-            "name": "nullfile",
-            "description": ""
-        }],
-        "name": "bsfdf",
         "description": ""
     }
 ]}

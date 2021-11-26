@@ -18,7 +18,6 @@ public class ToolBar extends JPanel {
 
     //components of MainInterface modified by toolBar
     private MainInterface parent;                       //maininterface object that instantiated the ToolBar object
-    private DataFileDirectoryMenu dataFileDirectoryMenu;
 
     //Tools modifying Menu components
     private AddTool addTool;
@@ -43,7 +42,6 @@ public class ToolBar extends JPanel {
         setSize(new Dimension(PANE_X, PANE_Y));
 
         this.parent = parent;
-        this.dataFileDirectoryMenu = parent.getDataFileDirectoryMenu();
 
         initializeTools(experimentDirectory);
     }
@@ -54,7 +52,7 @@ public class ToolBar extends JPanel {
     }
 
     public DataFileDirectoryMenu getDataFileDirectoryMenu() {
-        return dataFileDirectoryMenu;
+        return parent.getDataFileDirectoryMenu();
     }
 
     public MainInterface getMainInterface() {

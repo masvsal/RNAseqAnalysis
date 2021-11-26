@@ -28,15 +28,15 @@ I would like to work in bioinformatics so I want to understand the basic workflo
 - As a user, I want to be able to see a graph of the fold change across all genes in an RNAseq file.
 
 ####Phase 4 - Task 3
-- reflect on the structure of my project
-- Given further time, I would implement the following changes/refactoring into my project
-  - reduce coupling in the UI package 
-    - reduce references to experiment directory by storing it once in main interface and referring to this field 
-    in all other classes
-  - implementing the composite design pattern in the model package. 
-    - named file = leaf
-    - directory = composite
-- 
+- My project can be described as a collection of different groups of classes that were designed for different phases of the project throughout the term. Each collection has better coupling between classes within each collection than between collections. Additionally, the data structures in my project were designed before I head learned about the composite and observer design patterns. If I had known about these patterns beforehand, the coupling both within and between the model and ui packages would be improved.  
+
+- Given further time, I would implement the following changes/refactoring into my project:
+- UI package:
+   - reduce references to experiment directory, experiment and data file classes by storing each field once in the main interface class and "getting" this field in all other classes
+   - implement an observer - observable design pattern between the experiment directory/data file directory classes and the data file directory/data file display classes. 
+   - store tools as a list in toolbar instead of storing each in an individual field.
+- model package:
+  - implement a composite pattern to store data files. named file = leaf, directory = composite. This would reduce redundancies in methods between classes and would make return types easier to deal with.
 
 ### Citations:
 - code in persistence package modelled off of CPSC210 JSONSerializationDemo:

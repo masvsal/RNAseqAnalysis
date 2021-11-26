@@ -21,8 +21,8 @@ import java.util.ArrayList;
 public class ExperimentDirectoryMenu extends Menu implements ListSelectionListener, ActionListener {
 
     private ExperimentDirectory experimentDirectory;        //reference to main data structure
-    private DataFileDirectoryMenu dataFileDirectoryMenu;    //reference to menu component that depends on currently
-                                                            //selected item
+
+
 
 
     //MODIFiES: this
@@ -34,8 +34,6 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
         setLayout(new BoxLayout(this, 1));
 
         this.experimentDirectory = mainInterface.getExperimentDirectory();
-
-        this.dataFileDirectoryMenu = dataFileDirectoryMenu;
 
         selection = new JLabel("Please choose an experiment");
         selection.setHorizontalAlignment(SwingConstants.CENTER);
@@ -64,7 +62,7 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
         if (idx != -1) {
             selectedExperimentName = experimentDirectory.getFile(idx + 1).getName();
             selection.setText(selectedExperimentName);
-            dataFileDirectoryMenu.addExperimentList(selectedExperimentName);
+            mainInterface.getDataFileDirectoryMenu().addExperimentList(selectedExperimentName);
             mainInterface.getToolBar().setActiveList(this);
             mainInterface.validate();
             mainInterface.pack();
@@ -119,7 +117,7 @@ public class ExperimentDirectoryMenu extends Menu implements ListSelectionListen
                 mainInterface.validate();
             } else if (e.getActionCommand().equals("2")) {
                 saveAndShowDescription(experimentDirectory);
-                dataFileDirectoryMenu.refreshDisplay();
+                mainInterface.getDataFileDirectoryMenu().refreshDisplay();
             }
         } catch (IndexOutOfBoundsException err) {
             textField.setText("Bad Input. Please try again:");
